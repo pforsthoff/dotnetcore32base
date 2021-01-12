@@ -1,13 +1,13 @@
 kind: Pod
 apiVersion: v1
 metadata:
-  name: DotNetCore32Base-app
+  name: dotnetcore32base-app
   labels:
-    app: DotNetCore32Base-app
+    app: dotnetcore32base-app
 spec:
   containers:
-    - name: DotNetCore32Base-app
-      image: pforsthoff/DotNetCore32Base
+    - name: dotnetcore32base-app
+      image: pforsthoff/dotnetcore32base
       
   serviceAccount: jenkins
 ---
@@ -15,10 +15,10 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: DotNetCore32Base-service
+  name: dotnetcore32base-service
 spec:
   selector:
-    app: DotNetCore32Base-app
+    app: dotnetcore32base-app
   ports:
     - name: http
       port: 80
