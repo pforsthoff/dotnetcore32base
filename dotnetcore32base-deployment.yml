@@ -1,0 +1,26 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: DotNetCore32Base-app
+  labels:
+    app: DotNetCore32Base-app
+spec:
+  containers:
+    - name: DotNetCore32Base-app
+      image: pforsthoff/DotNetCore32Base
+      
+  serviceAccount: jenkins
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: DotNetCore32Base-service
+spec:
+  selector:
+    app: DotNetCore32Base-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80 # Default port for image
+  type: LoadBalancer
