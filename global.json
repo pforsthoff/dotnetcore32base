@@ -1,0 +1,6 @@
+{
+  "projects": [ "DotNetCore32Base.Service", "DotNetCore32Base.Data", "DotNetCore32Base.MVC" ],
+  "sdk": {
+    "version": "5.0.101"
+  }
+}
