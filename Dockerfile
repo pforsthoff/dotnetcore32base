@@ -1,8 +1,5 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
-WORKDIR /app
-
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS build
-COPY . .
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+COPY /DotNetCore32Base.MVC/bin/Release/netcoreapp3.1/. /app
 #WORKDIR /src
 #COPY dotnetcore32base.sln ./
 #COPY dotnetcore32base.mvc/*.csproj ./dotnetcore32base.mvc/
@@ -16,7 +13,7 @@ COPY . .
 #RUN donet publish -c Release -o /app
 
 #FROM base AS final
-WORKDIR /DotNetCore32Base.MVC/bin/Release/netcoreapp3.1
+WORKDIR /app
 #COPY --from=publish /app .
 
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
