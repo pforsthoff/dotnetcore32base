@@ -16,6 +16,8 @@ COPY /DotNetCore32Base.MVC/bin/Release/netcoreapp3.1/publish/ /app
 WORKDIR /app
 RUN ls
 #COPY --from=publish /app .
-
+RUN apt-get apt-get update -y
+RUN RUN apt-get install -y icu-devtools
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
 ENTRYPOINT ["dotnet", "DotNetCore32Base.MVC.dll"]

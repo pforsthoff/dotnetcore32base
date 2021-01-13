@@ -39,12 +39,6 @@ namespace DotNetCore32Base
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile("secrets/appsettings.secrets.json", optional: true)
-                .AddEnvironmentVariables();
-            builder.Build();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
