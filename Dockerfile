@@ -17,7 +17,6 @@ WORKDIR /app
 RUN ls
 #COPY --from=publish /app .
 # Install cultures (same approach as Alpine SDK image)
-RUN echo -e "http://nl.alpinelinux.org/alpine/v3.5/main\nhttp://nl.alpinelinux.org/alpine/v3.5/community" > /etc/apk/repositories
 RUN apk add --no-cache icu-libs
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
