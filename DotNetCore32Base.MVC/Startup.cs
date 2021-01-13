@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using DotNetCore32Base.Data.Models;
 using DotNetCore32Base.Data.Repositories;
 using DotNetCore32Base.Service.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace DotNetCore32Base
 {
@@ -35,8 +37,14 @@ namespace DotNetCore32Base
             services.AddControllersWithViews();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("secrets/appsettings.secrets.json", optional: true)
+                .AddEnvironmentVariables();
+            builder.Build();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -57,6 +65,13 @@ namespace DotNetCore32Base
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+            app.Run(async (context) =>
+            {
+                var message = $"Host: {Environment.MachineName}\n" +
+                    $"EnvironmentName: {env.EnvironmentName}\n" +
+                    $"Secret value: {Configuration["Database:ConnectionString"]}";
+                await context.Response.WriteAsync(message);
             });
         }
     }

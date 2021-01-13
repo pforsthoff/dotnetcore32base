@@ -9,8 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCore32Base.Data", "Do
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FC90480E-602A-4054-9CD5-4DB9D1C8713E}"
 	ProjectSection(SolutionItems) = preProject
+		appsettings.secrets.json = appsettings.secrets.json
 		Dockerfile = Dockerfile
-		DotNetCore32Base.MVC\dotnetcore32base-deployment.yml = DotNetCore32Base.MVC\dotnetcore32base-deployment.yml
+		dotnetcore32base-deployment.yml = dotnetcore32base-deployment.yml
 		global.json = global.json
 		version.txt = version.txt
 	EndProjectSection
