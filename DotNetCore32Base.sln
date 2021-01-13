@@ -12,7 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FC90480E-602
 		appsettings.secrets.json = appsettings.secrets.json
 		Dockerfile = Dockerfile
 		dotnetcore32base-deployment.yml = dotnetcore32base-deployment.yml
-		global.json = global.json
 		version.txt = version.txt
 	EndProjectSection
 EndProject
