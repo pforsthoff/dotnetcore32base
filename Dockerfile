@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0
+FROM mcr.microsoft.com/dotnet/aspnet:5.0.2-alpine3.12-amd64
 COPY /DotNetCore32Base.MVC/bin/Release/netcoreapp3.1/publish/ /app
 #WORKDIR /src
 #COPY dotnetcore32base.sln ./
