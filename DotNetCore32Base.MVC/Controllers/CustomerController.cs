@@ -14,7 +14,7 @@ namespace DotNetCore32Base.Controllers
         {
             _customerService = customerService;
         }
-
+        [HttpPost]
         public async Task<ActionResult<Customer>> CreateCustomer()
         {
             var customer = new Customer
@@ -26,12 +26,12 @@ namespace DotNetCore32Base.Controllers
 
             return await _customerService.AddCustomerAsync(customer);
         }
-
+        [HttpGet]
         public async Task<ActionResult<List<Customer>>> GetAllCustomers()
         {
             return await _customerService.GetAllCustomersAsync();
         }
-
+        [HttpGet]
         public async Task<ActionResult<Customer>> GetCustomerById()
         {
             return await _customerService.GetCustomerByIdAsync(1);

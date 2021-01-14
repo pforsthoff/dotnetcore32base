@@ -35,6 +35,7 @@ namespace DotNetCore32Base
             services.AddTransient<ICustomerService, CustomerService>();
 
             services.AddControllersWithViews();
+            services.AddSwaggerGen();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
@@ -49,24 +50,28 @@ namespace DotNetCore32Base
             }
 
             app.UseStaticFiles();
-
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Test API V1");
+            });
             app.UseRouting();
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
-            app.Run(async (context) =>
-            {
-                var message = $"Host: {Environment.MachineName}\n" +
-                    $"EnvironmentName: {env.EnvironmentName}\n" +
-                    $"Secret value: {Configuration["Database:ConnectionString"]}";
-                await context.Response.WriteAsync(message);
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=Home}/{action=Index}/{id?}");
+            //});
+            app.UseMvc();
+            //app.Run(async (context) =>
+            //{
+            //    var message = $"Host: {Environment.MachineName}\n" +
+            //        $"EnvironmentName: {env.EnvironmentName}\n" +
+            //        $"Secret value: {Configuration["Database:ConnectionString"]}";
+            //    await context.Response.WriteAsync(message);
+            //});
         }
     }
 }
