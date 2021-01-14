@@ -29,3 +29,6 @@ artifacts/
 .Microsoft.DotNet.ImageBuilder
 
 .sonarqube/
+
+*.dbmdl
+*.jfm
