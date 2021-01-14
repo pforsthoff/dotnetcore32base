@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>Cheetas3.EU.Domain</AssemblyName>
+    <RootNamespace>Cheetas3.EU.Domain</RootNamespace>
+  </PropertyGroup>
+
+</Project>

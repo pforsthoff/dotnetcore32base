@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: euconverison
+spec:
+  ttlSecondsAfterFinished: 0
+  template:
+    spec:
+      containers:    
+        - name: euconverison
+          image: harbor.littlewar.net/samples/euconversion:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: web
+              containerPort: 8890
+              protocol: TCP      
+          env:
+            - name: SliceId
+              value: "2"
+            - name: ApiHealthUrl
+              value: "http://localhost:8890/actuator/health"
+            - name: SleepDuration
+              value: "600000"
+      restartPolicy: Never    
