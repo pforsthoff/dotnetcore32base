@@ -1,0 +1,687 @@
+{
+  "x-generator": "NSwag v13.9.4.0 (NJsonSchema v10.3.1.0 (Newtonsoft.Json v12.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "EU Provisioner API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/Files": {
+      "get": {
+        "tags": [
+          "Files"
+        ],
+        "operationId": "Files_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FileDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Files"
+        ],
+        "operationId": "Files_Create",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFileCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Files/{id}": {
+      "get": {
+        "tags": [
+          "Files"
+        ],
+        "operationId": "Files_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Files"
+        ],
+        "operationId": "Files_Update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFileCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Files"
+        ],
+        "operationId": "Files_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Jobs": {
+      "get": {
+        "tags": [
+          "Jobs"
+        ],
+        "operationId": "Jobs_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JobDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Jobs/{id}": {
+      "get": {
+        "tags": [
+          "Jobs"
+        ],
+        "operationId": "Jobs_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Slices": {
+      "get": {
+        "tags": [
+          "Slices"
+        ],
+        "operationId": "Slices_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SliceDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Slices/{id}": {
+      "get": {
+        "tags": [
+          "Slices"
+        ],
+        "operationId": "Slices_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SliceDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/WeatherForecast": {
+      "get": {
+        "tags": [
+          "WeatherForecast"
+        ],
+        "operationId": "WeatherForecast_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FileDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "fileTimeSpan": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "status": {
+                "$ref": "#/components/schemas/FileStatus"
+              },
+              "fileStatus": {
+                "type": "string",
+                "nullable": true
+              },
+              "startTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "endTime": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        ]
+      },
+      "FileStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "JobUnprovisioned",
+          "JobProvisioned"
+        ],
+        "enum": [
+          0,
+          1
+        ]
+      },
+      "AuditableEntity": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false,
+        "properties": {
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastModifiedDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastModifiedBy": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateFileCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FileStatus"
+          }
+        }
+      },
+      "UpdateFileCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "jobProvisionedDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/FileStatus"
+          }
+        }
+      },
+      "JobDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "fileTimeSpan": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "status": {
+                "$ref": "#/components/schemas/JobStatus"
+              },
+              "jobStatus": {
+                "type": "string",
+                "nullable": true
+              },
+              "startedDateTime": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "completedDateTime": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "slices": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/Slice"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "JobStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Received",
+          "InProgress",
+          "Completed"
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
+      },
+      "Slice": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "jobId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "job": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Job"
+                  }
+                ]
+              },
+              "status": {
+                "$ref": "#/components/schemas/SliceStatus"
+              },
+              "sliceStarted": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "sliceCompleted": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "Job": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "fileId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "file": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/File"
+                  }
+                ]
+              },
+              "status": {
+                "$ref": "#/components/schemas/JobStatus"
+              },
+              "startedDateTime": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "completedDateTime": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "slices": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "$ref": "#/components/schemas/Slice"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "File": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "startTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "endTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "status": {
+                "$ref": "#/components/schemas/FileStatus"
+              },
+              "jobProvisionedDateTime": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "job": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Job"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "SliceStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Pending",
+          "Running",
+          "Completed"
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
+      },
+      "SliceDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "jobId": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "job": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Job"
+                  }
+                ]
+              },
+              "status": {
+                "$ref": "#/components/schemas/SliceStatus"
+              },
+              "sliceStatus": {
+                "type": "string",
+                "nullable": true
+              },
+              "sliceStarted": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "sliceCompleted": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "WeatherForecast": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "temperatureC": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "temperatureF": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      }
+    }
+  }
+}

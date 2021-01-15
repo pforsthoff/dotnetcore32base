@@ -1,4 +1,7 @@
-﻿using Cheetas3.EU.Application.Files.Queries;
+﻿using Cheetas3.EU.Application.Files.Commands.CreateFile;
+using Cheetas3.EU.Application.Files.Commands.DeleteFile;
+using Cheetas3.EU.Application.Files.Commands.UpdateFile;
+using Cheetas3.EU.Application.Files.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,6 +20,33 @@ namespace Cheetas3.EU.Controllers
         public async Task<FileDto> GetById(int id)
         {
             return await Mediator.Send(new GetFileByIdQuery { Id = id });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<int>> Create(CreateFileCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(int id, UpdateFileCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+
+            await Mediator.Send(command);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            await Mediator.Send(new DeleteFileCommand { Id = id });
+
+            return NoContent();
         }
     }
 }

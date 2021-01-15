@@ -26,6 +26,7 @@ using Cheetas3.EU.Application.Interfaces;
 using Cheetas3.EU.Application;
 using Cheetas3.EU.Infrastructure;
 using Cheetas3.EU.Services;
+using NSwag.Generation.Processors.Security;
 
 namespace Cheetas3.EU
 {
@@ -79,6 +80,20 @@ namespace Cheetas3.EU
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
+            });
+
+            services.AddOpenApiDocument(configure =>
+            {
+                configure.Title = "EU Provisioner API";
+                //configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
+                //{
+                //    Type = OpenApiSecuritySchemeType.ApiKey,
+                //    Name = "Authorization",
+                //    In = OpenApiSecurityApiKeyLocation.Header,
+                //    Description = "Type into the textbox: Bearer {your JWT token}."
+                //});
+
+                configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
             });
 
 
