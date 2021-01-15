@@ -35,7 +35,6 @@ namespace DotNetCore32Base
             services.AddTransient<ICustomerService, CustomerService>();
 
             services.AddControllersWithViews();
-            services.AddSwaggerGen();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
@@ -50,21 +49,19 @@ namespace DotNetCore32Base
             }
 
             app.UseStaticFiles();
-            app.UseSwagger();
-            app.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Test API V1");
-            });
+        
             app.UseRouting();
 
             app.UseAuthorization();
 
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //        name: "default",
-            //        pattern: "{controller=Home}/{action=Index}/{id?}");
-            //});
-            app.UseMvc();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            UpgradeDatabase(app);
             //app.Run(async (context) =>
             //{
             //    var message = $"Host: {Environment.MachineName}\n" +
@@ -72,6 +69,17 @@ namespace DotNetCore32Base
             //        $"Secret value: {Configuration["Database:ConnectionString"]}";
             //    await context.Response.WriteAsync(message);
             //});
+        }
+        private void UpgradeDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<RepositoryPatternDemoContext>();
+                if (context != null && context.Database != null)
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }

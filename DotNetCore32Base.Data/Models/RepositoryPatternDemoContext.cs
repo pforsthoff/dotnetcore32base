@@ -1,19 +1,16 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace DotNetCore32Base.Data.Models
 {
     public partial class RepositoryPatternDemoContext : DbContext
     {
-        public RepositoryPatternDemoContext()
-        {
-        }
+        //public RepositoryPatternDemoContext()
+        //{
+        //}
 
         public RepositoryPatternDemoContext(DbContextOptions<RepositoryPatternDemoContext> options)
             : base(options)
-        {
-        }
+        { }
 
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Product> Product { get; set; }
