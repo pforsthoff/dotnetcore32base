@@ -6,6 +6,72 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/Command/createjob/{id}": {
+      "get": {
+        "tags": [
+          "Command"
+        ],
+        "operationId": "Command_CreateJob",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Command/executejob/{id}": {
+      "get": {
+        "tags": [
+          "Command"
+        ],
+        "operationId": "Command_ExecuteJob",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Files": {
       "get": {
         "tags": [
@@ -139,6 +205,39 @@
           "Files"
         ],
         "operationId": "Files_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Files/api/Files/createjob/{id}": {
+      "get": {
+        "tags": [
+          "Files"
+        ],
+        "operationId": "Files_CreateJob",
         "parameters": [
           {
             "name": "id",
@@ -315,10 +414,6 @@
                 "type": "integer",
                 "format": "int32"
               },
-              "fileTimeSpan": {
-                "type": "integer",
-                "format": "int64"
-              },
               "status": {
                 "$ref": "#/components/schemas/FileStatus"
               },
@@ -399,7 +494,12 @@
             "format": "date-time"
           },
           "status": {
-            "$ref": "#/components/schemas/FileStatus"
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FileStatus"
+              }
+            ]
           }
         }
       },
@@ -433,10 +533,6 @@
               "id": {
                 "type": "integer",
                 "format": "int32"
-              },
-              "fileTimeSpan": {
-                "type": "integer",
-                "format": "int64"
               },
               "status": {
                 "$ref": "#/components/schemas/JobStatus"

@@ -21,15 +21,17 @@ namespace Cheetas3.EU.Infrastructure
 
             services.AddDbContext<ApplicationDbContext>(opt => opt
 #if DEBUG
-                            .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
+                .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
 #endif
-                            .UseSqlServer(cstr));
+                .UseSqlServer(cstr));
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(
                         configuration.GetConnectionString("DefaultConnection"),
                         b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-          
+
+            //services.AddScoped<IRepository, Repository>();
+
             //services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(cstr));
             //UpgradeDatabase(app);
             //services.AddDbContext<ApplicationDbContext>(options =>
@@ -79,7 +81,7 @@ namespace Cheetas3.EU.Infrastructure
             services.AddAuthorization(options => {
                 options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator"));
             });
-            
+
             return services;
         }
         private static void UpgradeDatabase(IApplicationBuilder app)

@@ -48,5 +48,11 @@ namespace Cheetas3.EU.Controllers
 
             return NoContent();
         }
+
+        [Route("api/[controller]/createjob/{id}")]
+        public async Task<ActionResult> CreateJob(int id)
+        {
+            return Content($"Created Job for FileId {id}");
+        }
     }
 }

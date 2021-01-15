@@ -14,12 +14,130 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface ICommandClient {
+    createJob(id: number): Observable<FileResponse>;
+    executeJob(id: number): Observable<FileResponse>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class CommandClient implements ICommandClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    createJob(id: number): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Command/createjob/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateJob(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateJob(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateJob(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
+    }
+
+    executeJob(id: number): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Command/executejob/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processExecuteJob(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processExecuteJob(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processExecuteJob(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
+    }
+}
+
 export interface IFilesClient {
     get(): Observable<FileDto[]>;
     create(command: CreateFileCommand): Observable<number>;
     getById(id: number): Observable<FileDto>;
     update(id: number, command: UpdateFileCommand): Observable<FileResponse>;
     delete(id: number): Observable<FileResponse>;
+    createJob(id: number): Observable<FileResponse>;
 }
 
 @Injectable({
@@ -273,6 +391,55 @@ export class FilesClient implements IFilesClient {
     }
 
     protected processDelete(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
+    }
+
+    createJob(id: number): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Files/api/Files/createjob/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateJob(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateJob(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateJob(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -680,7 +847,6 @@ export interface IAuditableEntity extends IEntity {
 
 export class FileDto extends AuditableEntity implements IFileDto {
     id?: number;
-    fileTimeSpan?: number;
     status?: FileStatus;
     fileStatus?: string | undefined;
     startTime?: Date;
@@ -694,7 +860,6 @@ export class FileDto extends AuditableEntity implements IFileDto {
         super.init(_data);
         if (_data) {
             this.id = _data["id"];
-            this.fileTimeSpan = _data["fileTimeSpan"];
             this.status = _data["status"];
             this.fileStatus = _data["fileStatus"];
             this.startTime = _data["startTime"] ? new Date(_data["startTime"].toString()) : <any>undefined;
@@ -712,7 +877,6 @@ export class FileDto extends AuditableEntity implements IFileDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["fileTimeSpan"] = this.fileTimeSpan;
         data["status"] = this.status;
         data["fileStatus"] = this.fileStatus;
         data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
@@ -724,7 +888,6 @@ export class FileDto extends AuditableEntity implements IFileDto {
 
 export interface IFileDto extends IAuditableEntity {
     id?: number;
-    fileTimeSpan?: number;
     status?: FileStatus;
     fileStatus?: string | undefined;
     startTime?: Date;
@@ -739,7 +902,7 @@ export enum FileStatus {
 export class CreateFileCommand implements ICreateFileCommand {
     startTime?: Date;
     endTime?: Date;
-    status?: FileStatus;
+    status?: FileStatus | undefined;
 
     constructor(data?: ICreateFileCommand) {
         if (data) {
@@ -777,7 +940,7 @@ export class CreateFileCommand implements ICreateFileCommand {
 export interface ICreateFileCommand {
     startTime?: Date;
     endTime?: Date;
-    status?: FileStatus;
+    status?: FileStatus | undefined;
 }
 
 export class UpdateFileCommand implements IUpdateFileCommand {
@@ -826,7 +989,6 @@ export interface IUpdateFileCommand {
 
 export class JobDto extends AuditableEntity implements IJobDto {
     id?: number;
-    fileTimeSpan?: number;
     status?: JobStatus;
     jobStatus?: string | undefined;
     startedDateTime?: Date | undefined;
@@ -841,7 +1003,6 @@ export class JobDto extends AuditableEntity implements IJobDto {
         super.init(_data);
         if (_data) {
             this.id = _data["id"];
-            this.fileTimeSpan = _data["fileTimeSpan"];
             this.status = _data["status"];
             this.jobStatus = _data["jobStatus"];
             this.startedDateTime = _data["startedDateTime"] ? new Date(_data["startedDateTime"].toString()) : <any>undefined;
@@ -864,7 +1025,6 @@ export class JobDto extends AuditableEntity implements IJobDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["fileTimeSpan"] = this.fileTimeSpan;
         data["status"] = this.status;
         data["jobStatus"] = this.jobStatus;
         data["startedDateTime"] = this.startedDateTime ? this.startedDateTime.toISOString() : <any>undefined;
@@ -881,7 +1041,6 @@ export class JobDto extends AuditableEntity implements IJobDto {
 
 export interface IJobDto extends IAuditableEntity {
     id?: number;
-    fileTimeSpan?: number;
     status?: JobStatus;
     jobStatus?: string | undefined;
     startedDateTime?: Date | undefined;

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices;
+using Steeltoe.Extensions.Logging;
 
 namespace Cheetas3.EU
 {
@@ -25,9 +26,10 @@ namespace Cheetas3.EU
                     if (context.Database.IsSqlServer())
                         context.Database.Migrate();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
+                    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred while migrating or seeding the database.");
                     throw;
                 }
             }
@@ -56,31 +58,17 @@ namespace Cheetas3.EU
         {
             var host = Host.CreateDefaultBuilder(args)
                 .UseDefaultServiceProvider(configure => configure.ValidateScopes = false)
-                //.UseUrls("http://*:5000")
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseUrls("http://*:5000");
                     webBuilder.UseStartup<Startup>();
                 });
-            //host.ConfigureLogging((hostingContext, loggingBuilder) =>
-            //{
-            //    loggingBuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-            //    loggingBuilder.AddDynamicConsole();
-            //});
+            host.ConfigureLogging((hostingContext, loggingBuilder) =>
+            {
+                loggingBuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                loggingBuilder.AddDynamicConsole();
+            });
             return host;
         }
-        //public static IWebHostBuilder CreateWebHostBuilder(string[] args)
-        //{
-        //    var builder = WebHost.CreateDefaultBuilder(args)
-        //        .UseDefaultServiceProvider(configure => configure.ValidateScopes = false)
-        //        .UseUrls("http://*:5000")
-        //        .UseStartup<Startup>();
-        //    builder.ConfigureLogging((hostingContext, loggingBuilder) =>
-        //    {
-        //        loggingBuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-        //        loggingBuilder.AddDynamicConsole();
-        //    });
-        //    return builder;
-        //}
     }
 }

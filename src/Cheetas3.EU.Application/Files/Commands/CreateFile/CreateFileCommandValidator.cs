@@ -6,16 +6,17 @@ namespace Cheetas3.EU.Application.Files.Commands.CreateFile
     {
         public CreateFileCommandValidator()
         {
-            RuleFor(v => v.Status)
-                .NotEmpty();
+            //RuleFor(v => v.Status)
+            //    .NotNull();
+                //.IsInEnum();
             RuleFor(v => v.StartTime)
                 .NotEmpty();
             RuleFor(v => v.EndTime)
                 .NotEmpty();
-            //RuleFor(v => v).Must(v => v.EndTime == default ||
-            //                     v.StartTime == default ||
-            //                     v.EndTime > v.StartTime)
-            //                     .WithMessage("EndTime must be greater than StartTime");
+            RuleFor(v => v).Must(v => v.EndTime == default ||
+                                 v.StartTime == default ||
+                                 v.EndTime > v.StartTime)
+                                 .WithMessage("EndTime must be greater than StartTime");
         }
     }
 }
