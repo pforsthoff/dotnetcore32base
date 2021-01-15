@@ -1059,6 +1059,8 @@ export class Slice extends AuditableEntity implements ISlice {
     jobId?: number;
     job?: Job | undefined;
     status?: SliceStatus;
+    startTime?: Date;
+    endTime?: Date;
     sliceStarted?: Date | undefined;
     sliceCompleted?: Date | undefined;
 
@@ -1073,6 +1075,8 @@ export class Slice extends AuditableEntity implements ISlice {
             this.jobId = _data["jobId"];
             this.job = _data["job"] ? Job.fromJS(_data["job"]) : <any>undefined;
             this.status = _data["status"];
+            this.startTime = _data["startTime"] ? new Date(_data["startTime"].toString()) : <any>undefined;
+            this.endTime = _data["endTime"] ? new Date(_data["endTime"].toString()) : <any>undefined;
             this.sliceStarted = _data["sliceStarted"] ? new Date(_data["sliceStarted"].toString()) : <any>undefined;
             this.sliceCompleted = _data["sliceCompleted"] ? new Date(_data["sliceCompleted"].toString()) : <any>undefined;
         }
@@ -1091,6 +1095,8 @@ export class Slice extends AuditableEntity implements ISlice {
         data["jobId"] = this.jobId;
         data["job"] = this.job ? this.job.toJSON() : <any>undefined;
         data["status"] = this.status;
+        data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
+        data["endTime"] = this.endTime ? this.endTime.toISOString() : <any>undefined;
         data["sliceStarted"] = this.sliceStarted ? this.sliceStarted.toISOString() : <any>undefined;
         data["sliceCompleted"] = this.sliceCompleted ? this.sliceCompleted.toISOString() : <any>undefined;
         super.toJSON(data);
@@ -1103,6 +1109,8 @@ export interface ISlice extends IAuditableEntity {
     jobId?: number;
     job?: Job | undefined;
     status?: SliceStatus;
+    startTime?: Date;
+    endTime?: Date;
     sliceStarted?: Date | undefined;
     sliceCompleted?: Date | undefined;
 }
@@ -1237,6 +1245,9 @@ export class SliceDto extends AuditableEntity implements ISliceDto {
     job?: Job | undefined;
     status?: SliceStatus;
     sliceStatus?: string | undefined;
+    startTime?: Date;
+    endTime?: Date;
+    duration?: number;
     sliceStarted?: Date | undefined;
     sliceCompleted?: Date | undefined;
 
@@ -1252,6 +1263,9 @@ export class SliceDto extends AuditableEntity implements ISliceDto {
             this.job = _data["job"] ? Job.fromJS(_data["job"]) : <any>undefined;
             this.status = _data["status"];
             this.sliceStatus = _data["sliceStatus"];
+            this.startTime = _data["startTime"] ? new Date(_data["startTime"].toString()) : <any>undefined;
+            this.endTime = _data["endTime"] ? new Date(_data["endTime"].toString()) : <any>undefined;
+            this.duration = _data["duration"];
             this.sliceStarted = _data["sliceStarted"] ? new Date(_data["sliceStarted"].toString()) : <any>undefined;
             this.sliceCompleted = _data["sliceCompleted"] ? new Date(_data["sliceCompleted"].toString()) : <any>undefined;
         }
@@ -1271,6 +1285,9 @@ export class SliceDto extends AuditableEntity implements ISliceDto {
         data["job"] = this.job ? this.job.toJSON() : <any>undefined;
         data["status"] = this.status;
         data["sliceStatus"] = this.sliceStatus;
+        data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
+        data["endTime"] = this.endTime ? this.endTime.toISOString() : <any>undefined;
+        data["duration"] = this.duration;
         data["sliceStarted"] = this.sliceStarted ? this.sliceStarted.toISOString() : <any>undefined;
         data["sliceCompleted"] = this.sliceCompleted ? this.sliceCompleted.toISOString() : <any>undefined;
         super.toJSON(data);
@@ -1284,6 +1301,9 @@ export interface ISliceDto extends IAuditableEntity {
     job?: Job | undefined;
     status?: SliceStatus;
     sliceStatus?: string | undefined;
+    startTime?: Date;
+    endTime?: Date;
+    duration?: number;
     sliceStarted?: Date | undefined;
     sliceCompleted?: Date | undefined;
 }

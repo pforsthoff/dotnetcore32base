@@ -1,7 +1,11 @@
 ### Command to Add Migration 
-(Execute the Command in the Infrastructure Project Path)
+(Execute the Command in the solution directory (src))
+
+(install) dotnet tool install --global dotnet-ef --version 5.0.2
+(upgrade) dotnet tool update --global dotnet-ef
+
 ```shell
-dotnet ef migrations add Migration -s Cheetas3.EU.WebApi -p Cheetas3.EU.Infrastructure
+dotnet ef migrations add CheetasDb_Migration -s Cheetas3.EU.WebApi -p Cheetas3.EU.Infrastructure
 ```
 
 ### Docker Run Commands 

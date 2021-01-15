@@ -604,6 +604,14 @@
               "status": {
                 "$ref": "#/components/schemas/SliceStatus"
               },
+              "startTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "endTime": {
+                "type": "string",
+                "format": "date-time"
+              },
               "sliceStarted": {
                 "type": "string",
                 "format": "date-time",
@@ -753,6 +761,18 @@
               "sliceStatus": {
                 "type": "string",
                 "nullable": true
+              },
+              "startTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "endTime": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "duration": {
+                "type": "integer",
+                "format": "int64"
               },
               "sliceStarted": {
                 "type": "string",

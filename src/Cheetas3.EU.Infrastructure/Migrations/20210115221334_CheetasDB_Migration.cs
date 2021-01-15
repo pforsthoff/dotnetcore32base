@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Cheetas3.EU.Infrastructure.Migrations
 {
-    public partial class MyMigration : Migration
+    public partial class CheetasDB_Migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -245,6 +245,8 @@ namespace Cheetas3.EU.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     JobId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SliceStarted = table.Column<DateTime>(type: "datetime2", nullable: true),
                     SliceCompleted = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreationDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
