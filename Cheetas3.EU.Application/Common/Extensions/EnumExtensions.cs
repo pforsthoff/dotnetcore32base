@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace Cheetas3.EU.Converter.Extensions
+namespace Cheetas3.EU.Application.Common.Extensions
 {
     public static class EnumExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Cheetas3.EU.Application.Common.Mappings;
-using Cheetas3.EU.Application.JobProvisioningTasks.Queries;
+using Cheetas3.EU.Application.Files.Queries;
 using Cheetas3.EU.Application.Jobs.Queries;
 using Cheetas3.EU.Application.Slices.Queries;
 using Cheetas3.EU.Domain.Entities;
@@ -34,7 +34,7 @@ namespace Cheetas3.Application.UnitTests.Common.Mappings
         [Test]
         [TestCase(typeof(Slice), typeof(SliceDto))]
         [TestCase(typeof(Job), typeof(JobDto))]
-        [TestCase(typeof(JobProvisioningTask), typeof(JobProvisioningTaskDto))]
+        [TestCase(typeof(File), typeof(FileDto))]
         public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)
         {
             var instance = GetInstanceOf(source);

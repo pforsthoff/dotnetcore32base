@@ -11,8 +11,6 @@ namespace Cheetas3.EU.Application.Jobs.Comands.CreateJob
 {
     public class CreateJobCommand : IRequest<int>
     {
-        public DateTime DateTimeJobRcvd { get; set; }
-        public Int64 TimeSpan { get; set; }
         public JobStatus Status { get; set; }
     }
 
@@ -29,8 +27,6 @@ namespace Cheetas3.EU.Application.Jobs.Comands.CreateJob
         {
             var entity = new Job
             {
-                DateTimeJobRcvd = request.DateTimeJobRcvd,
-                TimeSpan = request.TimeSpan,
                 Status = JobStatus.Received
             };
 

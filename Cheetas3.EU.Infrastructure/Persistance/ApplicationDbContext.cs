@@ -34,8 +34,7 @@ namespace Cheetas3.EU.Infrastructure.Persistance
 
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Slice> Slices { get; set; }
-
-        public DbSet<JobProvisioningTask> JobProvisioningTasks { get; set; }
+        public DbSet<File> Files { get; set; }
 
         //public DbSet<Slices> Slices { get; set; }
 

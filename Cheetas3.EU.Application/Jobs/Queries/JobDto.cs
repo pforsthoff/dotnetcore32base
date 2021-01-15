@@ -11,12 +11,11 @@ namespace Cheetas3.EU.Application.Jobs.Queries
     public class JobDto : AuditableEntity, IMapFrom<Job>
     {
         public int Id { get; set; }
-        public DateTime DateTimeJobRcvd { get; set; }
-        public Int64 TimeSpan { get; set; }
+        public Int64 FileTimeSpan { get; set; }
         public JobStatus Status { get; set; }
         public string JobStatus { get; set; }
-        public DateTime? DateTimeJobStarted { get; set; }
-        public DateTime? DateTimeJobCompleted { get; set; }
+        public DateTime? StartedDateTime { get; set; }
+        public DateTime? CompletedDateTime { get; set; }
         public virtual ICollection<Slice> Slices { get; set; }
 
         public void Mapping(Profile profile)

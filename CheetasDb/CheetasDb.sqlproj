@@ -61,6 +61,7 @@
   <ItemGroup>
     <Build Include="Tables\Jobs.sql" />
     <Build Include="Tables\Slices.sql" />
+    <Build Include="Tables\Files.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="CheetasDb.refactorlog" />

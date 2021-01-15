@@ -9,7 +9,7 @@ namespace Cheetas3.EU.Application.Common.Interfaces
     {
         DbSet<Job> Jobs { get; set; }
         DbSet<Slice> Slices { get; set; }
-        DbSet<JobProvisioningTask> JobProvisioningTasks { get;set; }
+        DbSet<File> Files { get;set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

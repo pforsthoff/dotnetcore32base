@@ -8,28 +8,28 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Cheetas3.EU.Application.Jobs.Queries
+namespace Cheetas3.EU.Application.Files.Queries
 {
-    public class GetJobsQuery : IRequest<IEnumerable<JobDto>>
+    public class GetFilesQuery : IRequest<IEnumerable<FileDto>>
     {
     }
 
-    public class GetJobsQueryHandler : IRequestHandler<GetJobsQuery, IEnumerable<JobDto>>
+    public class GetFilesQueryHandler : IRequestHandler<GetFilesQuery, IEnumerable<FileDto>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetJobsQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetFilesQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<JobDto>> Handle(GetJobsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<FileDto>> Handle(GetFilesQuery request, CancellationToken cancellationToken)
         {
-            return  await _context.Jobs
+            return  await _context.Files
                 .OrderBy(o => o.CreationDateTime)
-                .ProjectTo<JobDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<FileDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
         }
     }

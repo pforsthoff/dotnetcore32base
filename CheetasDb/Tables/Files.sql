@@ -1,9 +1,9 @@
-﻿CREATE TABLE [dbo].[JobProvisioningTasks]
+﻿CREATE TABLE [dbo].[Files]
 (
 	[Id] INT NOT NULL IDENTITY PRIMARY KEY,
-    [FileTimeSpan] BIGINT NOT NULL,
+    [StartTime] DATETIME NOT NULL,
+    [EndTime] DATETIME NOT NULL,
     [Status] INT NOT NULL,
-    [JobProvisionedDateTime] DATETIME NULL,
     [CreatedBy] NVARCHAR(50) NOT NULL,
     [CreationDateTime] DATETIME NOT NULL,
     [LastModifiedBy] NVARCHAR(50) NULL,

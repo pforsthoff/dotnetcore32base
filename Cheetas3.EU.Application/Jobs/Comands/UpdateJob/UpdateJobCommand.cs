@@ -12,8 +12,8 @@ namespace Cheetas3.EU.Application.Jobs.Comands.UpdateJob
     public class UpdateJobCommand : IRequest
     {
         public int Id { get; set; }
-        public DateTime? DateTimeJobStarted { get; set; }
-        public DateTime? DateTimeJobCompleted { get; set; }
+        public DateTime? CompletedDateTime { get; set; }
+        public DateTime? StartedDateTime { get; set; }
         public JobStatus Status { get; set; }
     }
 
@@ -36,8 +36,8 @@ namespace Cheetas3.EU.Application.Jobs.Comands.UpdateJob
             }
 
             entity.Status = request.Status;
-            entity.DateTimeJobCompleted = request.DateTimeJobCompleted;
-            entity.DateTimeJobStarted = request.DateTimeJobStarted;
+            entity.CompletedDateTime = request.CompletedDateTime;
+            entity.StartedDateTime = request.StartedDateTime;
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

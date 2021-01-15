@@ -6,16 +6,16 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Cheetas3.EU.Application.JobProvisioningTasks.Commands.UpdateTask
+namespace Cheetas3.EU.Application.Files.Commands.UpdateFile
 {
-    public class UpdateJobProvisioningTaskCommand : IRequest
+    public class UpdateFileCommand : IRequest
     {
         public int Id { get; set; }
         public DateTime? JobProvisionedDateTime { get; set; }
-        public Domain.Enums.TaskStatus Status { get; set; }
+        public Domain.Enums.FileStatus Status { get; set; }
     }
 
-    public class UpdateTodoItemCommandHandler : IRequestHandler<UpdateJobProvisioningTaskCommand>
+    public class UpdateTodoItemCommandHandler : IRequestHandler<UpdateFileCommand>
     {
         private readonly IApplicationDbContext _context;
 
@@ -24,13 +24,13 @@ namespace Cheetas3.EU.Application.JobProvisioningTasks.Commands.UpdateTask
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdateJobProvisioningTaskCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateFileCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.JobProvisioningTasks.FindAsync(request.Id);
+            var entity = await _context.Files.FindAsync(request.Id);
 
             if (entity == null)
             {
-                throw new NotFoundException(nameof(JobProvisioningTask), request.Id);
+                throw new NotFoundException(nameof(File), request.Id);
             }
 
             entity.Status = request.Status;

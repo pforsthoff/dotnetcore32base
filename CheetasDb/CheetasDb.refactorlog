@@ -49,4 +49,39 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="LastModifiedDateTime" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="59c205c6-3cac-46a7-8c28-0f80fe9a6f15" ChangeDateTime="01/14/2021 22:53:10">
+    <Property Name="ElementName" Value="[dbo].[Files].[FileEndTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Files]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="EndTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="78f2f7a4-e86e-4fe1-9b61-4119da326f22" ChangeDateTime="01/14/2021 22:53:15">
+    <Property Name="ElementName" Value="[dbo].[Files].[FileStartTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Files]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StartTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="08b127ff-228d-4df3-b023-02e08cddd2a1" ChangeDateTime="01/14/2021 22:54:29">
+    <Property Name="ElementName" Value="[dbo].[Jobs].[DateTimeJobStarted]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Jobs]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="JobStartedDateTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="42ed940e-17a9-4704-bb45-0a969f797dfb" ChangeDateTime="01/14/2021 22:54:46">
+    <Property Name="ElementName" Value="[dbo].[Jobs].[DateTimeJobCompleted]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Jobs]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CompletedDateTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="05f22be9-b1b2-44ba-8efc-c917435a2996" ChangeDateTime="01/14/2021 22:54:55">
+    <Property Name="ElementName" Value="[dbo].[Jobs].[JobStartedDateTime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Jobs]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StartedDateTime" />
+  </Operation>
 </Operations>

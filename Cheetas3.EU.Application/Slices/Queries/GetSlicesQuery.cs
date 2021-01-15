@@ -27,7 +27,7 @@ namespace Cheetas3.EU.Application.Slices.Queries
 
         public async Task<IEnumerable<SliceDto>> Handle(GetSlicesQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Slices
+                return await _context.Slices
                 .OrderBy(o => o.CreationDateTime)
                 .ProjectTo<SliceDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
