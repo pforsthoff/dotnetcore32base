@@ -1,10 +1,12 @@
 using System;
-using System.Runtime.InteropServices;
-using Microsoft.AspNetCore;
+using Microsoft.Extensions.Hosting;
+using Cheetas3.EU.Infrastructure.Persistance;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Steeltoe.Extensions.Logging;
+using System.Runtime.InteropServices;
 
 namespace Cheetas3.EU
 {
@@ -12,8 +14,23 @@ namespace Cheetas3.EU
     {
         public static void Main(string[] args)
         {
-            var builder = CreateWebHostBuilder(args).Build();
+            var builder = CreateHostBuilder(args).Build();
             Console.WriteLine("Starting Engineering Unit API");
+            using (var scope = builder.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var context = services.GetRequiredService<ApplicationDbContext>();
+                    if (context.Database.IsSqlServer())
+                        context.Database.Migrate();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
             builder.Run();
         }
 
@@ -35,19 +52,35 @@ namespace Cheetas3.EU
 
             throw new Exception("Was unable to determine what OS this is running on, does not appear to be Windows or Linux!?");
         }
-
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            var builder = WebHost.CreateDefaultBuilder(args)
+            var host = Host.CreateDefaultBuilder(args)
                 .UseDefaultServiceProvider(configure => configure.ValidateScopes = false)
-                .UseUrls("http://*:5000")
-                .UseStartup<Startup>();
-            builder.ConfigureLogging((hostingContext, loggingBuilder) =>
-            {
-                loggingBuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                loggingBuilder.AddDynamicConsole();
-            });
-            return builder;
+                //.UseUrls("http://*:5000")
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseUrls("http://*:5000");
+                    webBuilder.UseStartup<Startup>();
+                });
+            //host.ConfigureLogging((hostingContext, loggingBuilder) =>
+            //{
+            //    loggingBuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+            //    loggingBuilder.AddDynamicConsole();
+            //});
+            return host;
         }
+        //public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        //{
+        //    var builder = WebHost.CreateDefaultBuilder(args)
+        //        .UseDefaultServiceProvider(configure => configure.ValidateScopes = false)
+        //        .UseUrls("http://*:5000")
+        //        .UseStartup<Startup>();
+        //    builder.ConfigureLogging((hostingContext, loggingBuilder) =>
+        //    {
+        //        loggingBuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+        //        loggingBuilder.AddDynamicConsole();
+        //    });
+        //    return builder;
+        //}
     }
 }

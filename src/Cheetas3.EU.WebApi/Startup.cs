@@ -1,4 +1,3 @@
-using AutoMapper;
 using Cheetas3.EU.Actuators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,27 +5,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Steeltoe.Common.HealthChecks;
 using Steeltoe.Management.Endpoint;
 using Steeltoe.Management.Endpoint.Health;
 using Steeltoe.Management.Endpoint.Info;
 using Steeltoe.Management.Info;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Linq;
 using Cheetas3.EU.Infrastructure.Persistance;
 using Cheetas3.EU.Application.Interfaces;
 using Cheetas3.EU.Application;
 using Cheetas3.EU.Infrastructure;
 using Cheetas3.EU.Services;
-using NSwag.Generation.Processors.Security;
 
 namespace Cheetas3.EU
 {

@@ -4,6 +4,7 @@ using Cheetas3.EU.Infrastructure.Identity;
 using Cheetas3.EU.Infrastructure.Persistance;
 using Cheetas3.EU.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,8 +25,13 @@ namespace Cheetas3.EU.Infrastructure
 #endif
                             .UseSqlServer(cstr));
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
-
-            services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(cstr));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(
+                        configuration.GetConnectionString("DefaultConnection"),
+                        b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+          
+            //services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(cstr));
+            //UpgradeDatabase(app);
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseInMemoryDatabase("DemoDb"));
 
@@ -73,8 +79,20 @@ namespace Cheetas3.EU.Infrastructure
             services.AddAuthorization(options => {
                 options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator"));
             });
-
+            
             return services;
+        }
+        private static void UpgradeDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                if (context != null && context.Database != null)
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }
+
