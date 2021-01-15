@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Cheetas3.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Cheetas3.EU.Application\Application.csproj", "{0636023B-BA40-4D7D-9E16-F52F24B08A33}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WepApi", "Cheetas3.EU.WebApi\WepApi.csproj", "{1AF84C39-21FC-4766-9298-D8F6AC830B00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "Cheetas3.EU.WebApi\WebApi.csproj", "{1AF84C39-21FC-4766-9298-D8F6AC830B00}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheetas3.Application.UnitTests", "Cheetas3.Application.UnitTests\Cheetas3.Application.UnitTests.csproj", "{7FE1416E-6BB2-43F9-8B73-8E6BBF4066E4}"
 EndProject

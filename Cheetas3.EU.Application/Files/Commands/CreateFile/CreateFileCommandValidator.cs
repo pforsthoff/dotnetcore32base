@@ -12,10 +12,10 @@ namespace Cheetas3.EU.Application.Files.Commands.CreateFile
                 .NotEmpty();
             RuleFor(v => v.EndTime)
                 .NotEmpty();
-            RuleFor(v => v).Must(v => v.EndTime == default ||
-                                 v.StartTime == default ||
-                                 v.EndTime > v.StartTime)
-                                 .WithMessage("EndTime must be greater than StartTime");
+            //RuleFor(v => v).Must(v => v.EndTime == default ||
+            //                     v.StartTime == default ||
+            //                     v.EndTime > v.StartTime)
+            //                     .WithMessage("EndTime must be greater than StartTime");
         }
     }
 }
