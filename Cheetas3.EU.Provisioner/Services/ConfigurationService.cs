@@ -1,9 +1,9 @@
-﻿using Cheetas3.EU.Converter.Interfaces;
+﻿using Cheetas3.EU.Provisioner.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Cheetas3.EU.Domain.Enums;
 
-namespace Cheetas3.EU.Converter.Services
+namespace Cheetas3.EU.Provisioner.Services
 {
     public class ConfigurationService : IConfigurationService
     {

@@ -1,7 +1,7 @@
 ﻿using Cheetas3.EU.Domain.Enums;
 using Microsoft.Extensions.Configuration;
 
-namespace Cheetas3.EU.Converter.Interfaces
+namespace Cheetas3.EU.Provisioner.Interfaces
 {
     public interface IConfigurationService
     {

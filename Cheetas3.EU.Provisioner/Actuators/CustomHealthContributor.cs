@@ -1,6 +1,6 @@
 ﻿using Steeltoe.Common.HealthChecks;
 
-namespace Cheetas3.EU.Converter
+namespace Cheetas3.EU.Provisioner
     .Actuators
 {
     public class CustomHealthContributor : IHealthContributor

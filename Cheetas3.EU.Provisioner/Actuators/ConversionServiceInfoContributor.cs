@@ -1,7 +1,7 @@
-﻿using Cheetas3.EU.Converter.Interfaces;
+﻿using Cheetas3.EU.Provisioner.Interfaces;
 using Steeltoe.Management.Info;
 
-namespace Cheetas3.EU.Converter.Actuators
+namespace Cheetas3.EU.Provisioner.Actuators
 {
     public class ConversionServiceInfoContributor : IInfoContributor
     {

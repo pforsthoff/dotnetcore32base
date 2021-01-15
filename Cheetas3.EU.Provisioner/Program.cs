@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Steeltoe.Extensions.Logging;
 
 
-namespace Cheetas3.EU.Converter
+namespace Cheetas3.EU.Provisioner
 {
     public class Program
     {
