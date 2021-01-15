@@ -40,7 +40,7 @@ namespace Cheetas3.EU
         {
             var builder = WebHost.CreateDefaultBuilder(args)
                 .UseDefaultServiceProvider(configure => configure.ValidateScopes = false)
-                .UseUrls("http://*:8888")
+                .UseUrls("http://*:5000")
                 .UseStartup<Startup>();
             builder.ConfigureLogging((hostingContext, loggingBuilder) =>
             {

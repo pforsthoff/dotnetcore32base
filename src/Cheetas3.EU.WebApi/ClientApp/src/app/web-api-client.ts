@@ -607,13 +607,9 @@ export class WeatherForecastClient implements IWeatherForecastClient {
     }
 }
 
-export abstract class AuditableEntity implements IAuditableEntity {
-    creationDateTime?: Date;
-    createdBy?: string | undefined;
-    lastModifiedDateTime?: Date | undefined;
-    lastModifiedBy?: string | undefined;
+export abstract class Entity implements IEntity {
 
-    constructor(data?: IAuditableEntity) {
+    constructor(data?: IEntity) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -623,6 +619,34 @@ export abstract class AuditableEntity implements IAuditableEntity {
     }
 
     init(_data?: any) {
+    }
+
+    static fromJS(data: any): Entity {
+        data = typeof data === 'object' ? data : {};
+        throw new Error("The abstract class 'Entity' cannot be instantiated.");
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        return data; 
+    }
+}
+
+export interface IEntity {
+}
+
+export abstract class AuditableEntity extends Entity implements IAuditableEntity {
+    creationDateTime?: Date;
+    createdBy?: string | undefined;
+    lastModifiedDateTime?: Date | undefined;
+    lastModifiedBy?: string | undefined;
+
+    constructor(data?: IAuditableEntity) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
         if (_data) {
             this.creationDateTime = _data["creationDateTime"] ? new Date(_data["creationDateTime"].toString()) : <any>undefined;
             this.createdBy = _data["createdBy"];
@@ -642,11 +666,12 @@ export abstract class AuditableEntity implements IAuditableEntity {
         data["createdBy"] = this.createdBy;
         data["lastModifiedDateTime"] = this.lastModifiedDateTime ? this.lastModifiedDateTime.toISOString() : <any>undefined;
         data["lastModifiedBy"] = this.lastModifiedBy;
+        super.toJSON(data);
         return data; 
     }
 }
 
-export interface IAuditableEntity {
+export interface IAuditableEntity extends IEntity {
     creationDateTime?: Date;
     createdBy?: string | undefined;
     lastModifiedDateTime?: Date | undefined;
