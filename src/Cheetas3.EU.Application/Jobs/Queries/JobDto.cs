@@ -11,7 +11,6 @@ namespace Cheetas3.EU.Application.Jobs.Queries
     public class JobDto : AuditableEntity, IMapFrom<Job>
     {
         public int Id { get; set; }
-        public Int64 FileTimeSpan { get; set; }
         public JobStatus Status { get; set; }
         public string JobStatus { get; set; }
         public DateTime? StartedDateTime { get; set; }

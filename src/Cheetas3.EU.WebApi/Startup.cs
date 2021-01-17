@@ -16,6 +16,7 @@ using Cheetas3.EU.Application.Interfaces;
 using Cheetas3.EU.Application;
 using Cheetas3.EU.Infrastructure;
 using Cheetas3.EU.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace Cheetas3.EU
 {
@@ -34,23 +35,12 @@ namespace Cheetas3.EU
         {
             var cstr = Configuration.GetConnectionString("DefaultConnection");
 
-            //            services.AddControllers();
-            //            services.AddAutoMapper(typeof(Startup));
-
             services.AddHealthActuator(Configuration);
             services.AddSingleton<IHealthContributor, CustomHealthContributor>();
             services.AddInfoActuator(Configuration);
             services.AddSingleton<IInfoContributor, ArbitraryInfoContributor>();
 
-            //            //Sql Server Database Stuff
-            //            services.AddDbContext<ApplicationDbContext>(opt => opt
-            //#if DEBUG
-            //                .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
-            //#endif
-            //                .UseSqlServer(cstr));
-            //            services.AddScoped<DbContext, ApplicationDbContext>();
             services.AddHealthChecks().AddSqlServer(cstr);
-            //            services.AddScoped<IRepository, Repository>();
 
             services.AddApplication();
             services.AddInfrastructure(Configuration);
@@ -103,8 +93,9 @@ namespace Cheetas3.EU
                 app.UseHsts();
             }
 
-            app.UseHealthChecks("/health");
-            app.UseHttpsRedirection();
+            //Using SteelToe for Health/Info
+            //app.UseHealthChecks("/health");
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             if (!env.IsDevelopment())
             {
@@ -120,6 +111,9 @@ namespace Cheetas3.EU
             {
                 endpoints.Map<HealthEndpoint>();
                 endpoints.Map<InfoEndpoint>();
+                endpoints.MapGet("/", async context => {
+                    await context.Response.WriteAsync("Nothing to see here!");
+                });
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");

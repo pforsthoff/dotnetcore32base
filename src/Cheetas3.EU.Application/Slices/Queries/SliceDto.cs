@@ -14,6 +14,9 @@ namespace Cheetas3.EU.Application.Slices.Queries
         public Job Job { get; set; }
         public SliceStatus Status { get; set; }
         public string SliceStatus { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public long Duration { get; set; }
         public DateTime? SliceStarted { get; set; }
         public DateTime? SliceCompleted { get; set; }
 
@@ -21,6 +24,7 @@ namespace Cheetas3.EU.Application.Slices.Queries
         {
             profile.CreateMap<Slice, SliceDto>()
                 .ForMember(dest => dest.SliceStatus, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => (src.EndTime - src.StartTime).Ticks))
                 .ForMember(dest => dest.Job, opt => opt.MapFrom(src => src.Job));
         }
     }

@@ -10,7 +10,6 @@ namespace Cheetas3.EU.Application.Files.Queries
     public class FileDto : AuditableEntity, IMapFrom<File>
     {
         public int Id { get; set; }
-        public Int64 FileTimeSpan { get; set; }
         public FileStatus Status { get; set; }
         public string FileStatus { get; set; }
         public DateTime StartTime { get; set; }
@@ -19,8 +18,7 @@ namespace Cheetas3.EU.Application.Files.Queries
         public void Mapping(Profile profile)
         {
             profile.CreateMap<File, FileDto>()
-                .ForMember(dest => dest.FileStatus, opt => opt.MapFrom(src => src.Status.ToString()))
-                .ForMember(dest => dest.FileTimeSpan, opt => opt.MapFrom(src => (src.EndTime - src.StartTime).Ticks));
+                .ForMember(dest => dest.FileStatus, opt => opt.MapFrom(src => src.Status.ToString()));
         }
     }
 }

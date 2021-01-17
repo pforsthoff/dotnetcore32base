@@ -12,7 +12,7 @@ namespace Cheetas3.EU.Application.Files.Commands.CreateFile
     {
         public  DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public FileStatus Status { get; set; }
+        public FileStatus? Status { get; set; }
     }
 
     public class CreateFileCommandHandler : IRequestHandler<CreateFileCommand, int>
@@ -30,7 +30,7 @@ namespace Cheetas3.EU.Application.Files.Commands.CreateFile
             {
                 StartTime = request.StartTime,
                 EndTime = request.EndTime,
-                Status = request.Status
+                Status = (FileStatus)request.Status
             };
             _context.Files.Add(entity);
 
