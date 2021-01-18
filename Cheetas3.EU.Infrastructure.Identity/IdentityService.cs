@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Cheetas3.EU.Infrastructure.Identity
+namespace Cheetas3.EU.Identity
 {
     public class IdentityService : IIdentityService
     {

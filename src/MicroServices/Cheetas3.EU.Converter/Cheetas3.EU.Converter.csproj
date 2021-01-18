@@ -26,6 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Cheetas3.EU.Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Cheetas3.EU.Infrastructure\Cheetas3.EU.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

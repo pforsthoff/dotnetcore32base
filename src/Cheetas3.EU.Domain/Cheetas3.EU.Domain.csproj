@@ -6,8 +6,4 @@
     <RootNamespace>Cheetas3.EU.Domain</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\" />
-  </ItemGroup>
-
 </Project>

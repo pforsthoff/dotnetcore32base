@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Cheetas3.EU.Application\Application.csproj" />
-    <ProjectReference Include="..\..\src\Cheetas3.EU.Domain\Domain.csproj" />
+    <ProjectReference Include="..\..\src\Cheetas3.EU.Application\Cheetas3.EU.Application.csproj" />
+    <ProjectReference Include="..\..\src\Cheetas3.EU.Domain\Cheetas3.EU.Domain.csproj" />
   </ItemGroup>
 
 </Project>

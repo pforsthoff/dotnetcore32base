@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
 
-namespace Cheetas3.EU.Infrastructure.Identity
+namespace Cheetas3.EU.Identity
 {
     public static class IdentityResultExtensions
     {

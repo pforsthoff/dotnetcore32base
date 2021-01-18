@@ -26,18 +26,18 @@
 		<PackageReference Include="Steeltoe.Extensions.Logging.DynamicLogger" Version="3.0.2" />
 		<PackageReference Include="Steeltoe.Management.CloudFoundryCore" Version="3.0.2" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="9.3.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="5.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0">
+		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="5.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Cheetas3.EU.Application\Application.csproj" />
-	  <ProjectReference Include="..\Cheetas3.EU.Infrastructure\Infrastructure.csproj" />
+	  <ProjectReference Include="..\Cheetas3.EU.Application\Cheetas3.EU.Application.csproj" />
+	  <ProjectReference Include="..\Cheetas3.EU.Infrastructure\Cheetas3.EU.Infrastructure.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Cheetas3.EU.Infrastructure.Migrations
+namespace Cheetas3.EU.Migrations
 {
     public partial class CheetasDB_Migration : Migration
     {

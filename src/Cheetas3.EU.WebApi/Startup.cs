@@ -11,7 +11,7 @@ using Steeltoe.Management.Endpoint.Health;
 using Steeltoe.Management.Endpoint.Info;
 using Steeltoe.Management.Info;
 using Microsoft.AspNetCore.Mvc;
-using Cheetas3.EU.Infrastructure.Persistance;
+using Cheetas3.EU.Persistance;
 using Cheetas3.EU.Application.Interfaces;
 using Cheetas3.EU.Application;
 using Cheetas3.EU.Infrastructure;

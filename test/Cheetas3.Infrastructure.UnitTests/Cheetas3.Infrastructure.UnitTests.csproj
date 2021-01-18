@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Cheetas3.EU.Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Cheetas3.EU.Infrastructure\Cheetas3.EU.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

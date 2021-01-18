@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Cheetas3.EU.Infrastructure.Persistance.Configurations
+namespace Cheetas3.EU.Persistance.Configurations
 {
     public class FileConfiguration : IEntityTypeConfiguration<File>
     {

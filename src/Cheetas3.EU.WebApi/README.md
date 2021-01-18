@@ -1,7 +1,7 @@
 ### Command to Add Migration 
 (Execute the Command in the solution directory (src))
 
-(install) dotnet tool install --global dotnet-ef --version 5.0.2
+(install) dotnet tool install --global dotnet-ef --version 5.0.1
 (upgrade) dotnet tool update --global dotnet-ef
 
 ```shell

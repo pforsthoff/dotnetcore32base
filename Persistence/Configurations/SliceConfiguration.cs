@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Cheetas3.EU.Infrastructure.Persistance.Mappings
+namespace Cheetas3.EU.Persistance.Mappings
 {
     public class SliceConfiguration : IEntityTypeConfiguration<Slice>
     {

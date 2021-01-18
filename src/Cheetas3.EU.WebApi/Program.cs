@@ -1,13 +1,12 @@
 using System;
 using Microsoft.Extensions.Hosting;
-using Cheetas3.EU.Infrastructure.Persistance;
 using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices;
 using Steeltoe.Extensions.Logging;
+using Cheetas3.EU.Persistance;
 
 namespace Cheetas3.EU
 {

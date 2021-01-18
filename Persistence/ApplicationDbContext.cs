@@ -1,7 +1,8 @@
 ﻿using Cheetas3.EU.Application.Common.Interfaces;
-using Cheetas3.EU.Application.Interfaces;
 using Cheetas3.EU.Domain.Entities;
 using Cheetas3.EU.Domain.Entities.Base;
+using Cheetas3.EU.Domain.Events;
+using Cheetas3.EU.Application.Interfaces;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +12,9 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Cheetas3.EU.Domain.Events;
-using Cheetas3.EU.Infrastructure.Identity;
+using Cheetas3.EU.Identity;
 
-namespace Cheetas3.EU.Infrastructure.Persistance
+namespace Cheetas3.EU.Persistance
 {
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
     {

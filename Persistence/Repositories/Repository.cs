@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Cheetas3.EU.Application.Interfaces;
 using Cheetas3.EU.Domain.Entities.Base;
 
-namespace Cheetas3.EU.Infrastructure.Persistance
+namespace Cheetas3.EU.Persistance
 {
 
     public class Repository : IRepository
