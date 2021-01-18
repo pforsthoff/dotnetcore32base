@@ -26,6 +26,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Cheetas3.EU.Infrastructure\Cheetas3.EU.Infrastructure.csproj" />
+	  <ProjectReference Include="..\..\Core\Cheetas3.EU.Application\Cheetas3.EU.Application.csproj" />
+	  <ProjectReference Include="..\..\Core\Cheetas3.EU.Domain\Cheetas3.EU.Domain.csproj" />
+	  <ProjectReference Include="..\..\Infrastructure\Cheetas3.EU.Infrastructure\Cheetas3.EU.Infrastructure.csproj" />
 	</ItemGroup>
 </Project>

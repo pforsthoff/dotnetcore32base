@@ -14,6 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\Cheetas3.EU.Application\Cheetas3.EU.Application.csproj" />
+    <ProjectReference Include="..\..\src\Core\Cheetas3.EU.Domain\Cheetas3.EU.Domain.csproj" />
     <ProjectReference Include="..\..\src\MicroServices\Cheetas3.EU.Provisioner\Cheetas3.EU.Provisioner.csproj" />
   </ItemGroup>
 

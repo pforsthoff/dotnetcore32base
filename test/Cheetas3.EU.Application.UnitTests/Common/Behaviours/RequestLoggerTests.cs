@@ -1,12 +1,12 @@
-﻿using Cheetas3.EU.Application.Common.Behaviours;
-using Cheetas3.EU.Application.Common.Interfaces;
-using Cheetas3.EU.Application.Files.Commands.CreateFile;
-using Microsoft.Extensions.Logging;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Cheetas3.EU.Application.Common.Interfaces;
+using Cheetas3.EU.Application.Files.Commands.CreateFile;
+using Cheetas3.EU.Application.Common.Behaviours;
+using Microsoft.Extensions.Logging;
 
 namespace Cheetas3.EU.Application.UnitTests.Common.Behaviours
 {

@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Cheetas3.EU.Application\Cheetas3.EU.Application.csproj" />
+    <ProjectReference Include="..\..\Core\Cheetas3.EU.Application\Cheetas3.EU.Application.csproj" />
   </ItemGroup>
 
 </Project>
