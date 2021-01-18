@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+  name: cheetas3-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cheetas3
+  template:
+    metadata:
+      labels:
+        app: cheetas3
+    spec:
+      containers:
+      - name: cheetas3
+        image: pforsthoff/cheetas3:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: "ASPNETCORE_ENVIRONMENT"
+          value: "Development"
+        volumeMounts:
+        - name: secrets
+          mountPath: /app/secrets
+          readOnly: true
+      volumes:
+      - name: secrets
+        secret:
+          secretName: secret-appsettings
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: cheetas3-service
+spec:
+  selector:
+    app: cheetas3
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80 # Default port for image
+  type: LoadBalancer

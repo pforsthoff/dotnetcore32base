@@ -33,7 +33,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{6C1B9AC0-6
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CheetasDb", "data\CheetasDb\CheetasDb.sqlproj", "{B8FEBD20-28B1-4CA1-BAED-7ECCA10B3C38}"
 EndProject
+<<<<<<< HEAD
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheetas3.Application.IntegrationTests", "test\Cheetas3.Application.IntegrationTests\Cheetas3.Application.IntegrationTests.csproj", "{E1D6883C-60B1-4FDC-A623-DB92F80BC5B7}"
+=======
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{85A8404E-F66D-41C1-B790-6657BC1C3606}"
+	ProjectSection(SolutionItems) = preProject
+		cheetas3-deployment.yml = cheetas3-deployment.yml
+		Dockerfile = Dockerfile
+	EndProjectSection
+>>>>>>> 651b256e125b970ea00c4d529f50c53f4b462ce1
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
