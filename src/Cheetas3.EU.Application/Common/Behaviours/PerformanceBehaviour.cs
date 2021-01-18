@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Cheetas3.EU.Application.Interfaces;
+using Cheetas3.EU.Application.Common.Interfaces;
 
 
 namespace Cheetas3.EU.Application.Common.Behaviours

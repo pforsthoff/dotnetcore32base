@@ -7,13 +7,11 @@ namespace Cheetas3.Infrastructure.UnitTests.Services
 {
     public class CalculateTimeSpanUnitTests
     {
-
         public class Slice
         {
             public int Id { get; set; }
             public DateTime StartTime { get; set; }
             public DateTime EndTime { get; set; }
-
         }
 
         [Test]
@@ -29,13 +27,11 @@ namespace Cheetas3.Infrastructure.UnitTests.Services
             var sliceCount = (timeSpan * 60) / sliceSpan;
             sliceCount.Should().Be(12);
 
-
             List<Slice> slices = new List<Slice>();
             Slice slice;
 
             var sliceStart = start;
             var sliceEnd = start.AddSeconds(sliceSpan);
-
 
             for (int i = 1; i < sliceCount + 1; i++)
             {
@@ -50,21 +46,17 @@ namespace Cheetas3.Infrastructure.UnitTests.Services
                 sliceStart = sliceEnd.AddSeconds(1);
                 sliceEnd = sliceStart.AddSeconds(sliceSpan);
 
-                //Remove the count from processing
+                //Remove the count from the last slice's time.
                 if (i == sliceCount)
-                    slice.EndTime = slice.EndTime.AddSeconds(-sliceCount+1);
-
+                    slice.EndTime = slice.EndTime.AddSeconds(-sliceCount + 1);
             }
 
             var startString = $"StartTime = {start}, EndTime = {end}";
             var endString = $"Slices StartTime = {slices[0].StartTime}, EndTime = {slices[11].EndTime}";
 
-
             slices.Should().HaveCount(12);
             slices[0].StartTime.Should().Be(start);
             slices[11].EndTime.Should().Be(end);
-
-
          }
     }
 }

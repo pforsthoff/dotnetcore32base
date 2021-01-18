@@ -2,7 +2,6 @@
 using Cheetas3.EU.Domain.Entities;
 using Cheetas3.EU.Domain.Entities.Base;
 using Cheetas3.EU.Domain.Events;
-using Cheetas3.EU.Application.Interfaces;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;

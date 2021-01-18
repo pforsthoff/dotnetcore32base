@@ -1,5 +1,4 @@
 ﻿using Cheetas3.EU.Application.Common.Interfaces;
-using Cheetas3.EU.Application.Interfaces;
 using Cheetas3.EU.Identity;
 using Cheetas3.EU.Persistance;
 using Cheetas3.EU.Infrastructure.Services;

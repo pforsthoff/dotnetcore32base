@@ -1,4 +1,4 @@
-﻿using Cheetas3.EU.Application.Interfaces;
+﻿using Cheetas3.EU.Application.Common.Interfaces;
 using System;
 
 namespace Cheetas3.EU.Infrastructure.Services
