@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{6C1B9AC0-6
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CheetasDb", "data\CheetasDb\CheetasDb.sqlproj", "{B8FEBD20-28B1-4CA1-BAED-7ECCA10B3C38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheetas3.Application.IntegrationTests", "test\Cheetas3.Application.IntegrationTests\Cheetas3.Application.IntegrationTests.csproj", "{E1D6883C-60B1-4FDC-A623-DB92F80BC5B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{B8FEBD20-28B1-4CA1-BAED-7ECCA10B3C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8FEBD20-28B1-4CA1-BAED-7ECCA10B3C38}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B8FEBD20-28B1-4CA1-BAED-7ECCA10B3C38}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{E1D6883C-60B1-4FDC-A623-DB92F80BC5B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1D6883C-60B1-4FDC-A623-DB92F80BC5B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1D6883C-60B1-4FDC-A623-DB92F80BC5B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1D6883C-60B1-4FDC-A623-DB92F80BC5B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +104,7 @@ Global
 		{583A0AF6-C100-42E7-BF0D-5C7275971182} = {65B794A3-1B60-44E9-B047-AD0E4232C142}
 		{C9DAC145-16F0-4516-A86F-5DF016148087} = {65B794A3-1B60-44E9-B047-AD0E4232C142}
 		{B8FEBD20-28B1-4CA1-BAED-7ECCA10B3C38} = {6C1B9AC0-6642-4E6B-9669-24562A44EA5E}
+		{E1D6883C-60B1-4FDC-A623-DB92F80BC5B7} = {044AE8C6-EB12-43DD-8CE7-88D30F77953E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {247961FA-97B2-4C68-B44A-767403ACC579}
