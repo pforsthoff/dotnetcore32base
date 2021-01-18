@@ -1,6 +1,6 @@
 ﻿using Cheetas3.EU.Application.Common.Attributes;
 using Cheetas3.EU.Application.Common.Exceptions;
-using Cheetas3.EU.Application.Interfaces;
+using Cheetas3.EU.Application.Common.Interfaces;
 using MediatR;
 using System;
 using System.Linq;

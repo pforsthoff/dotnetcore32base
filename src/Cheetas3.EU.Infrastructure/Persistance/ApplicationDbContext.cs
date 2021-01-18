@@ -1,5 +1,4 @@
 ﻿using Cheetas3.EU.Application.Common.Interfaces;
-using Cheetas3.EU.Application.Interfaces;
 using Cheetas3.EU.Domain.Entities;
 using Cheetas3.EU.Domain.Entities.Base;
 using IdentityServer4.EntityFramework.Options;

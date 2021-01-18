@@ -1,7 +1,7 @@
 ﻿using Cheetas3.EU.Application.Common.Models;
 using System.Threading.Tasks;
 
-namespace Cheetas3.EU.Application.Interfaces
+namespace Cheetas3.EU.Application.Common.Interfaces
 {
     public interface IIdentityService
     {

@@ -1,4 +1,4 @@
-﻿using Cheetas3.EU.Application.Interfaces;
+﻿using Cheetas3.EU.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 

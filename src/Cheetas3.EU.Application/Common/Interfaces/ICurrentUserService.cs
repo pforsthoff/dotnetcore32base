@@ -1,4 +1,4 @@
-﻿namespace Cheetas3.EU.Application.Interfaces
+﻿namespace Cheetas3.EU.Application.Common.Interfaces
 {
     public interface ICurrentUserService
     {

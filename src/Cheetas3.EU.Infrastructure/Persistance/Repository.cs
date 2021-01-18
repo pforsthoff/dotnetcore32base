@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Cheetas3.EU.Application.Interfaces;
+using Cheetas3.EU.Application.Common.Interfaces;
 using Cheetas3.EU.Domain.Entities.Base;
 
 namespace Cheetas3.EU.Infrastructure.Persistance

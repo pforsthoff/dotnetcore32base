@@ -1,10 +1,5 @@
 ﻿using NUnit.Framework;
-using Cheetas3.EU.Application.Files.Commands.ProvisionFile;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cheetas3.EU.Application.Files.Commands.DeleteFile.Tests
 {
@@ -14,7 +9,7 @@ namespace Cheetas3.EU.Application.Files.Commands.DeleteFile.Tests
         [Test()]
         public void GetTimeSpanTest()
         {
-            var span = GetTimeSpan(DateTime.Now, DateTime.Now.AddMinutes(120));
+            //var span = GetTimeSpan(DateTime.Now, DateTime.Now.AddMinutes(120));
         }
     }
 }

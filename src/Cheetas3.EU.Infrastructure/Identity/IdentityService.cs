@@ -1,5 +1,5 @@
 ﻿using Cheetas3.EU.Application.Common.Models;
-using Cheetas3.EU.Application.Interfaces;
+using Cheetas3.EU.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

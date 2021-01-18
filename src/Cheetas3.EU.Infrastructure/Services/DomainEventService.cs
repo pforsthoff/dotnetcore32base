@@ -1,6 +1,6 @@
 ﻿using Cheetas3.EU.Domain.Events;
 using Cheetas3.EU.Application.Common.Models;
-using Cheetas3.EU.Application.Interfaces;
+using Cheetas3.EU.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
