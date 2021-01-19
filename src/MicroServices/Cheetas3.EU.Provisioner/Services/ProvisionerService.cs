@@ -12,6 +12,7 @@ using Cheetas3.EU.Application.Common.Interfaces;
 using Cheetas3.EU.Domain.Entities;
 using Cheetas3.EU.Domain.Enums;
 using System.Runtime.InteropServices;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cheetas3.EU.Provisioner.Services
 {
