@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="KubernetesClient" Version="4.0.4" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
@@ -20,6 +21,10 @@
     <ProjectReference Include="..\..\src\Core\Cheetas3.EU.Application\Cheetas3.EU.Application.csproj" />
     <ProjectReference Include="..\..\src\Core\Cheetas3.EU.Domain\Cheetas3.EU.Domain.csproj" />
     <ProjectReference Include="..\..\src\MicroServices\Cheetas3.EU.Provisioner\Cheetas3.EU.Provisioner.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="artifacts/*" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
 </Project>
