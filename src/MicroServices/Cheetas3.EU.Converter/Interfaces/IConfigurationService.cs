@@ -1,4 +1,4 @@
-﻿using Cheetas3.EU.Domain.Enums;
+﻿using Cheetas3.EU.Converter.Enums;
 using Microsoft.Extensions.Configuration;
 
 namespace Cheetas3.EU.Converter.Interfaces

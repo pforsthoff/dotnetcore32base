@@ -59,6 +59,7 @@ namespace Cheetas3.EU.Infrastructure
             //services.AddScoped<IGlobalDbContext>(provider => provider.GetService<GlobalDbContext>());
 
             services.AddScoped<IDomainEventService, DomainEventService>();
+            services.AddScoped<IDockerService, DockerService>();
 
             services
                 .AddDefaultIdentity<ApplicationUser>()
