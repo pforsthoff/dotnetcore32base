@@ -25,7 +25,7 @@ namespace Cheetas3.EU.Converter
 
             var builder = WebHost.CreateDefaultBuilder(args)
                 .UseDefaultServiceProvider(configure => configure.ValidateScopes = false)
-                .UseUrls("http://*:8890")
+                .UseUrls("http://*:5000")
                 .UseConfiguration(config)
                 .UseStartup<Startup>();
 

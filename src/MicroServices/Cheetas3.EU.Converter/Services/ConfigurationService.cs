@@ -1,7 +1,7 @@
 ﻿using Cheetas3.EU.Converter.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
-using Cheetas3.EU.Domain.Enums;
+using Cheetas3.EU.Converter.Enums;
 
 namespace Cheetas3.EU.Converter.Services
 {
@@ -12,7 +12,7 @@ namespace Cheetas3.EU.Converter.Services
         public string ServiceHealthEndPoint { get; }
         public string Status { get; set; }
         public int SliceId { get; set; }
-        public int SleepDuration { get; }
+        public int SleepDuration { get; } = 300000;
         public ServiceInfoStatus ServiceInfoStatus { get; set; }
         public int JobId { get; set; }
         public int Id { get; set; }
@@ -24,9 +24,10 @@ namespace Cheetas3.EU.Converter.Services
             Configuration = configuration;
             _logger = logger;
 
-            ServiceHealthEndPoint = Configuration.GetValue<string>("ServiceHealthEndPoint");
+            ServiceHealthEndPoint = "http://localhost:5000/actuator/health";
+            //ServiceHealthEndPoint = Configuration.GetValue<string>("ServiceHealthEndPoint");
             SliceId = Configuration.GetValue<int>("SliceId");
-            SleepDuration = Configuration.GetValue<int>("SleepDuration");
+            //SleepDuration = Configuration.GetValue<int>("SleepDuration");
             _logger.LogInformation("Configuration Service Started");
         }
     }

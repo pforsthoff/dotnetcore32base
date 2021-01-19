@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Cheetas3.EU.Converter</RootNamespace>
-    <AssemblyName>Cheetas.EU.Converter.Service</AssemblyName>
+    <AssemblyName>Cheetas3.EU.Converter</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>Cheetas3.EU.Converter</PackageId>
     <Company>Dell</Company>
@@ -23,11 +23,5 @@
     <PackageReference Include="Steeltoe.Connector.EFCore" Version="3.0.2" />
     <PackageReference Include="Steeltoe.Extensions.Logging.DynamicLogger" Version="3.0.2" />
     <PackageReference Include="Steeltoe.Management.CloudFoundryCore" Version="3.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\Cheetas3.EU.Application\Cheetas3.EU.Application.csproj" />
-    <ProjectReference Include="..\..\Core\Cheetas3.EU.Domain\Cheetas3.EU.Domain.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Cheetas3.EU.Infrastructure\Cheetas3.EU.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

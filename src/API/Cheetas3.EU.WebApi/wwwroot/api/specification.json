@@ -6,12 +6,12 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/Command/createjob/{id}": {
+    "/api/Commands/createjob/{id}": {
       "get": {
         "tags": [
-          "Command"
+          "Commands"
         ],
-        "operationId": "Command_CreateJob",
+        "operationId": "Commands_CreateJob",
         "parameters": [
           {
             "name": "id",
@@ -39,17 +39,16 @@
         }
       }
     },
-    "/api/Command/executejob/{id}": {
-      "get": {
+    "/api/Commands/ExecuteJob": {
+      "post": {
         "tags": [
-          "Command"
+          "Commands"
         ],
-        "operationId": "Command_ExecuteJob",
+        "operationId": "Commands_ExecuteJob",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -232,7 +231,7 @@
         }
       }
     },
-    "/api/Files/api/Files/createjob": {
+    "/api/Files/createjob": {
       "post": {
         "tags": [
           "Files"
@@ -321,6 +320,46 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/JobDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Jobs/ExecuteJob": {
+      "post": {
+        "tags": [
+          "Jobs"
+        ],
+        "operationId": "Jobs_ExecuteJob",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "targetPlatform",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/TargetPlatform"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
                 }
               }
             }
@@ -731,6 +770,20 @@
           "Pending",
           "Running",
           "Completed"
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
+      },
+      "TargetPlatform": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "HostOS",
+          "Docker",
+          "Kubernetes"
         ],
         "enum": [
           0,

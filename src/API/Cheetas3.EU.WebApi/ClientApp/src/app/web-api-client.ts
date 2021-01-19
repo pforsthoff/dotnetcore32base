@@ -14,15 +14,15 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
-export interface ICommandClient {
+export interface ICommandsClient {
     createJob(id: number): Observable<FileResponse>;
-    executeJob(id: number): Observable<FileResponse>;
+    executeJob(id: number | undefined): Observable<FileResponse>;
 }
 
 @Injectable({
     providedIn: 'root'
 })
-export class CommandClient implements ICommandClient {
+export class CommandsClient implements ICommandsClient {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -33,7 +33,7 @@ export class CommandClient implements ICommandClient {
     }
 
     createJob(id: number): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Command/createjob/{id}";
+        let url_ = this.baseUrl + "/api/Commands/createjob/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -81,11 +81,12 @@ export class CommandClient implements ICommandClient {
         return _observableOf<FileResponse>(<any>null);
     }
 
-    executeJob(id: number): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Command/executejob/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+    executeJob(id: number | undefined): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Commands/ExecuteJob?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -96,7 +97,7 @@ export class CommandClient implements ICommandClient {
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processExecuteJob(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -411,7 +412,7 @@ export class FilesClient implements IFilesClient {
     }
 
     createJob(id: number | undefined, sliceDuration: number | undefined): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Files/api/Files/createjob?";
+        let url_ = this.baseUrl + "/api/Files/createjob?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
@@ -468,6 +469,7 @@ export class FilesClient implements IFilesClient {
 export interface IJobsClient {
     get(): Observable<JobDto[]>;
     getById(id: number): Observable<JobDto>;
+    executeJob(id: number | undefined, targetPlatform: TargetPlatform | undefined): Observable<FileResponse>;
 }
 
 @Injectable({
@@ -584,6 +586,60 @@ export class JobsClient implements IJobsClient {
             }));
         }
         return _observableOf<JobDto>(<any>null);
+    }
+
+    executeJob(id: number | undefined, targetPlatform: TargetPlatform | undefined): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Jobs/ExecuteJob?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (targetPlatform === null)
+            throw new Error("The parameter 'targetPlatform' cannot be null.");
+        else if (targetPlatform !== undefined)
+            url_ += "targetPlatform=" + encodeURIComponent("" + targetPlatform) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processExecuteJob(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processExecuteJob(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processExecuteJob(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
     }
 }
 
@@ -1242,6 +1298,12 @@ export enum SliceStatus {
     Pending = 0,
     Running = 1,
     Completed = 2,
+}
+
+export enum TargetPlatform {
+    HostOS = 0,
+    Docker = 1,
+    Kubernetes = 2,
 }
 
 export class SliceDto extends AuditableEntity implements ISliceDto {

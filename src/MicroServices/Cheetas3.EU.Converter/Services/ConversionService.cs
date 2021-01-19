@@ -9,9 +9,8 @@ using System.IO;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using Cheetas3.EU.Converter.Interfaces;
-using Cheetas3.EU.Application.Common.Interfaces;
-using Cheetas3.EU.Domain.Entities;
-using Cheetas3.EU.Domain.Enums;
+using Cheetas3.EU.Converter.Entities;
+using Cheetas3.EU.Converter.Enums;
 
 namespace Cheetas3.EU.Converter.Services
 {
