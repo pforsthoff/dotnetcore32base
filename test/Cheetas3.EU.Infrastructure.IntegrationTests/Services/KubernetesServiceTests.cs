@@ -12,15 +12,15 @@ namespace Cheetas3.EU.Infrastructure.IntegrationTests.Services
         [TestCase("apps-admin@apps")]
         public void CheckConfigCurrentContext(string context)
         {
-            var fi = new FileInfo("artifacts/config");
+            var fi = new FileInfo("assets/config");
             var cfg = KubernetesClientConfiguration.BuildConfigFromConfigFile(fi, context, useRelativePaths: false);
             Assert.AreEqual(context, cfg.CurrentContext);
         }
-        [TestCase("dotnet-test")]
+        [TestCase("nunit-test")]
         public void CreateReadNamespace(string @namespace)
         {
             // Load from the default kubeconfig on the machine.
-            var config = KubernetesClientConfiguration.BuildConfigFromConfigFile("artifacts/config");
+            var config = KubernetesClientConfiguration.BuildConfigFromConfigFile("assets/config");
 
             // Use the config object to create a client.
             var client = new Kubernetes(config);

@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="artifacts/*" CopyToOutputDirectory="Always" />
+    <None Include="assets/*" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
 </Project>
