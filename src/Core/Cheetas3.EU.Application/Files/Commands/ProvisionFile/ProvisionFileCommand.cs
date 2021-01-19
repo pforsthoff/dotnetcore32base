@@ -13,15 +13,19 @@ namespace Cheetas3.EU.Application.Files.Commands.ProvisionFile
     public class ProvisionFileCommand : IRequest
     {
         public int Id { get; set; }
+        //Set Default Value to 600 (10 Minutes)
+        public int SliceDuration { get; set; } = 600;
     }
 
     public class ProvisionFileCommandHandler : IRequestHandler<ProvisionFileCommand>
     {
         private readonly IApplicationDbContext _context;
+        private readonly IFileProvisioningService _fileProvisioningService;
 
-        public ProvisionFileCommandHandler(IApplicationDbContext context)
+        public ProvisionFileCommandHandler(IApplicationDbContext context, IFileProvisioningService fileProvisioningService)
         {
             _context = context;
+            _fileProvisioningService = fileProvisioningService;
         }
 
         public async Task<Unit> Handle(ProvisionFileCommand request, CancellationToken cancellationToken)
@@ -34,11 +38,6 @@ namespace Cheetas3.EU.Application.Files.Commands.ProvisionFile
             if (file == null)
                 throw new NotFoundException(nameof(File), request.Id);
 
-
-            var fileTimeSpan = (file.EndTime - file.StartTime).TotalMinutes;
-            var sliceTimeSpan = 600; //Value From Configuration
-            var sliceCount = (fileTimeSpan * 60) / sliceTimeSpan;
-
             Job job = new Job
             {
                 FileId = request.Id,
@@ -48,29 +47,11 @@ namespace Cheetas3.EU.Application.Files.Commands.ProvisionFile
             _context.Jobs.Add(job);
             await _context.SaveChangesAsync(new CancellationToken());
 
-            Slice slice;
 
-            var sliceStartTime = file.StartTime;
-            var sliceEndTime = sliceStartTime.AddSeconds(sliceTimeSpan);
+            var slices = _fileProvisioningService.CreateJobSlices(file.StartTime, file.EndTime, request.SliceDuration, job.Id);
 
-            for (int i = 1; i < sliceCount + 1; i++)
-            {
-                slice = new Slice
-                {
-                    JobId = job.Id,
-                    Status = Domain.Enums.SliceStatus.Pending,
-                    StartTime = sliceStartTime,
-                    EndTime = sliceEndTime
-                };
-
+            foreach (var slice in slices.OrderBy(o => o.StartTime))
                 _context.Slices.Add(slice);
-
-                sliceStartTime = sliceEndTime.AddSeconds(1);
-                sliceEndTime = sliceStartTime.AddSeconds(sliceTimeSpan);
-
-                if (i == sliceCount)
-                    slice.EndTime = slice.EndTime.AddSeconds(-sliceCount + 1);
-            }
 
             file.Status = Domain.Enums.FileStatus.JobProvisioned;
             await _context.SaveChangesAsync(new CancellationToken());

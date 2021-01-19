@@ -17,6 +17,7 @@ using Cheetas3.EU.Application;
 using Cheetas3.EU.Infrastructure;
 using Cheetas3.EU.Services;
 using Microsoft.AspNetCore.Http;
+using Cheetas3.EU.Infrastructure.Services;
 
 namespace Cheetas3.EU
 {
@@ -39,6 +40,7 @@ namespace Cheetas3.EU
             services.AddSingleton<IHealthContributor, CustomHealthContributor>();
             services.AddInfoActuator(Configuration);
             services.AddSingleton<IInfoContributor, ArbitraryInfoContributor>();
+            services.AddSingleton<IFileProvisioningService, FileProvisioningService>();
 
             services.AddHealthChecks().AddSqlServer(cstr);
 
@@ -112,7 +114,7 @@ namespace Cheetas3.EU
                 endpoints.Map<HealthEndpoint>();
                 endpoints.Map<InfoEndpoint>();
                 endpoints.MapGet("/", async context => {
-                    await context.Response.WriteAsync("Nothing to see here!");
+                    await context.Response.WriteAsync("Nothing to see here! Perhaps you'd like to add '/api' to the end of the url?");
                 });
                 endpoints.MapControllerRoute(
                     name: "default",

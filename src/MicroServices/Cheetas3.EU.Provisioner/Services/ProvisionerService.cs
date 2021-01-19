@@ -11,6 +11,8 @@ using Cheetas3.EU.Provisioner.Interfaces;
 using Cheetas3.EU.Application.Common.Interfaces;
 using Cheetas3.EU.Domain.Entities;
 using Cheetas3.EU.Domain.Enums;
+using System.Runtime.InteropServices;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cheetas3.EU.Provisioner.Services
 {
@@ -45,14 +47,51 @@ namespace Cheetas3.EU.Provisioner.Services
 
         private void PollServiceHealthStatus(object state)
         {
-            //var status = GetServiceHealthStatus();
+            var status = GetServiceHealthStatus();
 
-            //if (status == ServiceHealthStatus.Up)
-            //{
-            //    _timer.Dispose();
-            //    DoConversion();
-            //    ShutDownApp();
-            //}
+            if (status == ServiceHealthStatus.Up)
+            {
+                _timer.Dispose();
+                //Get Slices For Job
+                //Spin up Containers at concurancy level
+                GetJobById(1);
+                //DockerApiUri();
+                ShutDownApp();
+            }
+        }
+
+        private void GetJobById(int id)
+        {
+            var job = _context.Jobs
+                .Where(x => x.Id == id).Include(i => i.Slices)
+                .SingleOrDefault();
+
+            foreach (var slice in job.Slices.Where(s => s.Status == SliceStatus.Pending))
+            {
+                
+            }
+
+        }
+
+        private string DockerApiUri()
+        {
+            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+            if (isWindows)
+            {
+                _logger.LogInformation("Services is running as Windows Platfrom");
+                return "npipe://./pipe/docker_engine";
+            }
+
+            var isLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+
+            if (isLinux)
+            {
+                _logger.LogInformation("Services is running as Linux Platfrom");
+                return "unix:/var/run/docker.sock";
+            }
+
+            throw new Exception("Was unable to determine what OS this is running on, does not appear to be Windows or Linux!?");
         }
 
         private void ShutDownApp()
