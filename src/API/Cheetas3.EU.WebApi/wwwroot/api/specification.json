@@ -232,8 +232,8 @@
         }
       }
     },
-    "/api/Files/api/Files/createjob/{id}": {
-      "get": {
+    "/api/Files/api/Files/createjob": {
+      "post": {
         "tags": [
           "Files"
         ],
@@ -241,13 +241,21 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
             },
             "x-position": 1
+          },
+          {
+            "name": "sliceDuration",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
           }
         ],
         "responses": {

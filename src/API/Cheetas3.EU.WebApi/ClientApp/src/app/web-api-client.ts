@@ -137,7 +137,7 @@ export interface IFilesClient {
     getById(id: number): Observable<FileDto>;
     update(id: number, command: UpdateFileCommand): Observable<FileResponse>;
     delete(id: number): Observable<FileResponse>;
-    createJob(id: number): Observable<FileResponse>;
+    createJob(id: number | undefined, sliceDuration: number | undefined): Observable<FileResponse>;
 }
 
 @Injectable({
@@ -410,11 +410,16 @@ export class FilesClient implements IFilesClient {
         return _observableOf<FileResponse>(<any>null);
     }
 
-    createJob(id: number): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Files/api/Files/createjob/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+    createJob(id: number | undefined, sliceDuration: number | undefined): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Files/api/Files/createjob?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (sliceDuration === null)
+            throw new Error("The parameter 'sliceDuration' cannot be null.");
+        else if (sliceDuration !== undefined)
+            url_ += "sliceDuration=" + encodeURIComponent("" + sliceDuration) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -425,7 +430,7 @@ export class FilesClient implements IFilesClient {
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processCreateJob(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
