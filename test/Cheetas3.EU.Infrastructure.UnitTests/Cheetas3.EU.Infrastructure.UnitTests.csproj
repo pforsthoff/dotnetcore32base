@@ -21,9 +21,4 @@
     <Folder Include="Persistance\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Cheetas3.EU.Application\Application.csproj" />
-    <ProjectReference Include="..\..\src\Cheetas3.EU.Infrastructure\Infrastructure.csproj" />
-  </ItemGroup>
-
 </Project>

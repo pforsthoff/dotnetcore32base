@@ -20,16 +20,14 @@ namespace Cheetas3.EU.Provisioner.UnitTests.Services
         {
         }
 
-        [Test]
+        [Test, Order(1)]
         public void CanCreateDockerClient()
         {
-            DockerClient client = new DockerClientConfiguration()
-                 .CreateClient();
+            var client = new DockerClientConfiguration().CreateClient();
 
             var platform = DockerApiUri();
-            Console.WriteLine(platform);
-            platform.Should().NotBeNull();
 
+            platform.Should().NotBeNull();
             client.Should().NotBeNull();
         }
 
@@ -182,7 +180,7 @@ namespace Cheetas3.EU.Provisioner.UnitTests.Services
                     }
                 },
             };
-            var images = await client.Images.ListImagesAsync(imageListParameters);
+             var images = await client.Images.ListImagesAsync(imageListParameters);
             images.Should().NotBeNull();
           }
 

@@ -17,7 +17,7 @@ using Newtonsoft.Json;
 using System.Reflection;
 using Cheetas3.EU.Converter.Services;
 using Cheetas3.EU.Converter.Interfaces;
-using Cheetas3.EU.Infrastructure.Persistance;
+using Cheetas3.EU.Persistance;
 using Cheetas3.EU.Application.Common.Interfaces;
 using Cheetas3.EU.Infrastructure;
 
