@@ -7,8 +7,8 @@ namespace Cheetas3.EU.Application.Common.Interfaces
 {
     public interface IDockerService
     {
-        DockerClient CreateDockerClient();
-        DockerClient CreateDockerClient(string url);
+        void CreateDockerClient();
+        void CreateDockerClient(string url);
         Task<bool> CreateAndStartContainerAsync(string imageName);
         Task<bool> CreateAndStartContainerAsync(string imageName, List<string> envVariables);
         Task<bool> CreateAndStartContainerAsync(string imageName, List<string> envVariables, Dictionary<string, EmptyStruct> exposedPorts, HostConfig hostConfig);

@@ -13,29 +13,26 @@ namespace Cheetas3.EU.Infrastructure.Services
     public class DockerService : IDockerService
     {
         private readonly ILogger<DockerService> _logger;
-        private readonly DockerClient _dockerClient;
+        private DockerClient _dockerClient;
 
-        public DockerService(ILogger<DockerService> logger, string dockerServiceUrl = "localhost")
+        public DockerService(ILogger<DockerService> logger)
         {
             _logger = logger;
-            if(dockerServiceUrl == "localhost")
-                _dockerClient = CreateDockerClient();
-            else
-                _dockerClient = CreateDockerClient(dockerServiceUrl);
         }
 
-        public DockerClient CreateDockerClient(string url)
+        public void CreateDockerClient(string url)
         {
             var uri = new Uri(url);
-            return new DockerClientConfiguration(uri).CreateClient();
+            _dockerClient = new DockerClientConfiguration(uri).CreateClient();
         }
-        public DockerClient CreateDockerClient()
+        public void CreateDockerClient()
         {
-            return new DockerClientConfiguration().CreateClient();
+            _dockerClient = new DockerClientConfiguration().CreateClient();
         }
 
         public async Task PullImageAsync(string imageName)
         {
+
             await _dockerClient.Images.CreateImageAsync(
                 new ImagesCreateParameters
                 {
@@ -67,9 +64,11 @@ namespace Cheetas3.EU.Infrastructure.Services
 
             var containerName =  $"{imageName.Substring(startPosition, length) }_{envVariables[2].Replace('=','_').ToLower()}";
 
+
             //Create The Container
             var container = await _dockerClient.Containers.CreateContainerAsync(new CreateContainerParameters
             {
+                
                 Image = imageName,
                 Env = envVariables,
                 Name = containerName

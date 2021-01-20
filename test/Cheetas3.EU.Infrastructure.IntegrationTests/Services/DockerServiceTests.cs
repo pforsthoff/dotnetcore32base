@@ -24,7 +24,6 @@ namespace Cheetas3.EU.Provisioner.UnitTests.Services
         public void CanCreateDockerClient()
         {
             var client = new DockerClientConfiguration().CreateClient();
-
             var platform = DockerApiUri();
 
             platform.Should().NotBeNull();
@@ -46,12 +45,13 @@ namespace Cheetas3.EU.Provisioner.UnitTests.Services
 
 
 
-        [Test]
-        public async Task CanPullNewDockerImageAsync()
+        [TestCase("http://192.168.1.20:2375")]
+        public async Task CanPullImageAsyncOnRemoteHost(string @namespace)
         {
-            var imageName = "alpine:latest";
+            var imageName = "pguerette/euconverter:latest";
 
-            DockerClient client = new DockerClientConfiguration().CreateClient();
+            var uri = new Uri(@namespace);
+            DockerClient client = new DockerClientConfiguration(uri).CreateClient();
             client.Should().NotBeNull();
 
             //Check to see if image exists
@@ -113,6 +113,7 @@ namespace Cheetas3.EU.Provisioner.UnitTests.Services
             //Create The Container
             var result = await client.Containers.CreateContainerAsync(new CreateContainerParameters
             {
+
                 Image = imageName,
                 ExposedPorts = new Dictionary<string, EmptyStruct>
                 {
