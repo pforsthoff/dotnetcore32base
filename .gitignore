@@ -3,6 +3,9 @@
 [Oo]bj/
 [Oo]ut/
 
+# .kube config
+assets/config
+
 # cache for misc downloads
 artifacts/
 
