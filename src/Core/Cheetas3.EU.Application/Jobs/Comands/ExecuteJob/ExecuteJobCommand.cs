@@ -1,9 +1,7 @@
 ﻿using Cheetas3.EU.Domain.Entities;
 using Cheetas3.EU.Domain.Enums;
-using Cheetas3.EU.Domain.Events;
 using Cheetas3.EU.Application.Common.Interfaces;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -23,6 +21,7 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
     {
         private readonly IApplicationDbContext _context;
         private readonly IDockerService _dockerService;
+        private readonly IKubernetesService _kubernetesService;
         private readonly IDateTime _dateTime;
 
         public ExecuteJobCommandHandler(IApplicationDbContext context, IDockerService dockerService, IDateTime dateTime)
@@ -31,7 +30,12 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
             _dockerService = dockerService;
             _dateTime = dateTime;
         }
-
+        public ExecuteJobCommandHandler(IApplicationDbContext context, IKubernetesService kubernetesService, IDateTime dateTime)
+        {
+            _context = context;
+            _kubernetesService = kubernetesService;
+            _dateTime = dateTime;
+        }
         public async Task<int> Handle(ExecuteJobCommand request, CancellationToken cancellationToken)
         {
 
@@ -50,23 +54,33 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
             await _context.SaveChangesAsync(cancellationToken);
 
             var platform = request.TargetPlatform;
-
-            //_dockerService.CreateDockerClient("http://192.168.1.20:2375");
-            _dockerService.CreateDockerClient();
-            var imageName = "pguerette/euconverter:latest";
-            await _dockerService.PullImageAsync(imageName);
-
-
-
-            var envVariables = new List<string>();
-            envVariables.Add($"SleepDuration=300000");
-            envVariables.Add($"ServiceHealthEndPoint=http://localhost:5000/actuator/health");
-            foreach (var slice in entity.Slices)
+            switch (platform)
             {
-                envVariables.Add($"SliceId={slice.Id}");
-                await _dockerService.CreateAndStartContainerAsync(imageName, envVariables);
-                envVariables.RemoveAt(2);
+                case TargetPlatform.HostOS:
+                    break;
+                case TargetPlatform.Docker:
+                    //_dockerService.CreateDockerClient("http://192.168.1.20:2375");
+                    _dockerService.CreateDockerClient();
+                    var imageName = "pguerette/euconverter:latest";
+                    await _dockerService.PullImageAsync(imageName);
+
+                    var envVariables = new List<string>();
+                    envVariables.Add($"SleepDuration=300000");
+                    envVariables.Add($"ServiceHealthEndPoint=http://localhost:5000/actuator/health");
+                    foreach (var slice in entity.Slices)
+                    {
+                        envVariables.Add($"SliceId={slice.Id}");
+                        await _dockerService.CreateAndStartContainerAsync(imageName, envVariables);
+                        envVariables.RemoveAt(2);
+                    }
+                    break;
+                case TargetPlatform.Kubernetes:
+                    var pods = _kubernetesService.GetPods("default");
+                    break;
+                default:
+                    break;
             }
+           
             return 1;
         }
     }

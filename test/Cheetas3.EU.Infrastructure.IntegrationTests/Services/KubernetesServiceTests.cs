@@ -24,7 +24,7 @@ namespace Cheetas3.EU.Infrastructure.IntegrationTests.Services
             _namespace = new V1Namespace { Metadata = new V1ObjectMeta { Name = _guidNS } };
         }
 
-        [TestCase("dev-admin@dev"), Order(1)]
+        [TestCase("apps-admin@apps"), Order(1)]
         public void CheckConfigCurrentContext(string context)
         {
             var fi = new FileInfo("assets/config");

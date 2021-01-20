@@ -20,4 +20,8 @@
 	  <ProjectReference Include="..\Cheetas3.EU.Persistence\Cheetas3.EU.Persistence.csproj" />
 	</ItemGroup>
 
+  <ItemGroup>
+    <None Include="assets/*" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
 </Project>

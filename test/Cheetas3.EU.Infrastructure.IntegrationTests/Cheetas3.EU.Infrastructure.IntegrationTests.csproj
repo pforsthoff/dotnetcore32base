@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="KubernetesClient" Version="4.0.4" />
+    <PackageReference Include="KubernetesClient" Version="4.0.5" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
@@ -25,6 +25,12 @@
 
   <ItemGroup>
     <None Include="assets/*" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="assests\**" />
+    <EmbeddedResource Remove="assests\**" />
+    <None Remove="assests\**" />
   </ItemGroup>
 
 </Project>
