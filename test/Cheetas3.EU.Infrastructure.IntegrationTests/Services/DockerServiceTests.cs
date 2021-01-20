@@ -31,6 +31,21 @@ namespace Cheetas3.EU.Provisioner.UnitTests.Services
             client.Should().NotBeNull();
         }
 
+        //Value based on current enviornment
+        [TestCase("http://192.168.1.20:2375")]
+        public void CanCreateDockerClientWithUri(string @namespace)
+        {
+            var uri = new Uri(@namespace);
+            var client = new DockerClientConfiguration(uri).CreateClient();
+
+            var platform = DockerApiUri();
+
+            platform.Should().NotBeNull();
+            client.Should().NotBeNull();
+        }
+
+
+
         [Test]
         public async Task CanPullNewDockerImageAsync()
         {
@@ -153,7 +168,7 @@ namespace Cheetas3.EU.Provisioner.UnitTests.Services
 
 
             //Kill the container
-            await client.Containers.KillContainerAsync(containerId, 
+            await client.Containers.KillContainerAsync(containerId,
                 new ContainerKillParameters(), CancellationToken.None );
 
             //Verify it's dead

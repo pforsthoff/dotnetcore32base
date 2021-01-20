@@ -15,12 +15,20 @@ namespace Cheetas3.EU.Infrastructure.Services
         private readonly ILogger<DockerService> _logger;
         private readonly DockerClient _dockerClient;
 
-        public DockerService(ILogger<DockerService> logger)
+        public DockerService(ILogger<DockerService> logger, string dockerServiceUrl = "localhost")
         {
             _logger = logger;
-            _dockerClient = CreateDockerClient();
+            if(dockerServiceUrl == "localhost")
+                _dockerClient = CreateDockerClient();
+            else
+                _dockerClient = CreateDockerClient(dockerServiceUrl);
         }
 
+        public DockerClient CreateDockerClient(string url)
+        {
+            var uri = new Uri(url);
+            return new DockerClientConfiguration(uri).CreateClient();
+        }
         public DockerClient CreateDockerClient()
         {
             return new DockerClientConfiguration().CreateClient();
@@ -52,11 +60,19 @@ namespace Cheetas3.EU.Infrastructure.Services
 
         public async Task<bool> CreateAndStartContainerAsync(string imageName, List<string> envVariables)
         {
+
+            var startPosition = imageName.LastIndexOf('/') + 1;
+            var endPosition = imageName.IndexOf(':');
+            var length = endPosition - startPosition;
+
+            var containerName =  $"{imageName.Substring(startPosition, length) }_{envVariables[2].Replace('=','_').ToLower()}";
+
             //Create The Container
             var container = await _dockerClient.Containers.CreateContainerAsync(new CreateContainerParameters
             {
                 Image = imageName,
-                Env = envVariables
+                Env = envVariables,
+                Name = containerName
             });
 
             //StartTheContainer

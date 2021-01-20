@@ -7,7 +7,7 @@ namespace Cheetas3.EU.Application.Jobs.Comands.CreateJob
     {
         public ExecuteJobCommandValidator()
         {
-            RuleFor(v => v.JobId)
+            RuleFor(v => v.Id)
                 .NotEmpty();
         }
     }
