@@ -5,11 +5,14 @@ using Cheetas3.EU.Converter.Enums;
 
 namespace Cheetas3.EU.Converter.Services
 {
+
     public class ConfigurationService : IConfigurationService
     {
+        private const string DEFAULT_HEALTH_ENDPOINT = "http://localhost:5000/actuator/health";
+
         private readonly ILogger<ConfigurationService> _logger;
         public IConfiguration Configuration { get; }
-        public string ServiceHealthEndPoint { get; }
+        public string ServiceHealthEndPoint { get; } = DEFAULT_HEALTH_ENDPOINT;
         public string Status { get; set; }
         public int SliceId { get; set; }
         public int SleepDuration { get; } = 300000;
@@ -24,11 +27,23 @@ namespace Cheetas3.EU.Converter.Services
             Configuration = configuration;
             _logger = logger;
 
-            ServiceHealthEndPoint = "http://localhost:5000/actuator/health";
-            //ServiceHealthEndPoint = Configuration.GetValue<string>("ServiceHealthEndPoint");
+            string serviceHealthEndPoint = Configuration.GetValue<string>("ServiceHealthEndPoint");
+            if (!string.IsNullOrEmpty(serviceHealthEndPoint))
+            {
+                ServiceHealthEndPoint = serviceHealthEndPoint;
+                _logger.LogInformation($"ServiceHealthEndPoint Passed into Service. Value:{serviceHealthEndPoint}");
+            }
+
+            int sleepDuration = Configuration.GetValue<int>("SleepDuration");
+            if (sleepDuration != 0)
+            {
+                SleepDuration = sleepDuration;
+                _logger.LogInformation($"SleepDuration Passed into Service. Value:{sleepDuration}");
+            }
+
             SliceId = Configuration.GetValue<int>("SliceId");
-            //SleepDuration = Configuration.GetValue<int>("SleepDuration");
             _logger.LogInformation("Configuration Service Started");
+            _logger.LogInformation($"SliceId: {SliceId}, SleepDurationValue: {SleepDuration}, ServiceHealthEndPointValue: {ServiceHealthEndPoint}");
         }
     }
 }

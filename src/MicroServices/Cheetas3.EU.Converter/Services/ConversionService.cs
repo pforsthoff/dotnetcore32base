@@ -36,7 +36,7 @@ namespace Cheetas3.EU.Converter.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Conversion Service is Initializaing.");
+            _logger.LogInformation($"Conversion Service is Initializaing for SliceId: {_configurationService.SliceId}");
 
             //Poll Container Health Every 2 Seconds
             _timer = new Timer(PollServiceHealthStatus, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));

@@ -32,8 +32,6 @@ namespace Cheetas3.EU.Converter
         public void ConfigureServices(IServiceCollection services)
         {
 
-            //services.AddInfrastructure(Configuration);
-
             services.AddSingleton<IConfigurationService, ConfigurationService>();
 
             services.AddControllers().AddNewtonsoftJson(options =>
@@ -41,7 +39,6 @@ namespace Cheetas3.EU.Converter
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
-            //services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddHealthActuator(Configuration);
             services.AddSingleton<IHealthContributor, CustomHealthContributor>();
@@ -59,6 +56,7 @@ namespace Cheetas3.EU.Converter
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
             services.AddHealthChecks().AddSqlServer(cstr);
 
+            //The Order of ConversionService should be last in the service collection
             services.AddHostedService<ConversionService>();
         }
 
