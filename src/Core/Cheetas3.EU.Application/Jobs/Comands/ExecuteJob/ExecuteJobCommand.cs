@@ -51,16 +51,16 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
 
             var platform = request.TargetPlatform;
 
-            //_dockerService.CreateDockerClient("http://192.168.1.20:2375");
-            _dockerService.CreateDockerClient();
-            var imageName = "pguerette/euconverter:latest";
+            _dockerService.CreateDockerClient("http://192.168.1.20:2375");
+            //_dockerService.CreateDockerClient();
+            var imageName = "harbor.littlewar.net/samples/euconverter:latest";
             await _dockerService.PullImageAsync(imageName);
-
 
 
             var envVariables = new List<string>();
             envVariables.Add($"SleepDuration=300000");
             envVariables.Add($"ServiceHealthEndPoint=http://localhost:5000/actuator/health");
+
             foreach (var slice in entity.Slices)
             {
                 envVariables.Add($"SliceId={slice.Id}");
