@@ -4,7 +4,7 @@
 [Oo]ut/
 
 # .kube config
-assets/config
+assets/
 
 # cache for misc downloads
 artifacts/

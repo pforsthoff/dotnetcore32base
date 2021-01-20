@@ -3,10 +3,8 @@ using k8s.Models;
 using NUnit.Framework;
 using System;
 using System.IO;
-using System.Linq;
 using FluentAssertions;
 using System.Threading.Tasks;
-using System.Threading;
 
 namespace Cheetas3.EU.Infrastructure.IntegrationTests.Services
 {
