@@ -24,15 +24,11 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
         private readonly IKubernetesService _kubernetesService;
         private readonly IDateTime _dateTime;
 
-        public ExecuteJobCommandHandler(IApplicationDbContext context, IDockerService dockerService, IDateTime dateTime)
+        public ExecuteJobCommandHandler(IApplicationDbContext context, IDockerService dockerService, 
+                                        IKubernetesService kubernetesService, IDateTime dateTime)
         {
             _context = context;
             _dockerService = dockerService;
-            _dateTime = dateTime;
-        }
-        public ExecuteJobCommandHandler(IApplicationDbContext context, IKubernetesService kubernetesService, IDateTime dateTime)
-        {
-            _context = context;
             _kubernetesService = kubernetesService;
             _dateTime = dateTime;
         }
@@ -75,7 +71,9 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
                     }
                     break;
                 case TargetPlatform.Kubernetes:
-                    var pods = _kubernetesService.GetPods("default");
+                    var client = _kubernetesService.GetKubernetesClient();
+                    var job = _kubernetesService.GetEUConverterJob();
+                    await client.CreateNamespacedJobWithHttpMessagesAsync(job,"default");
                     break;
                 default:
                     break;
