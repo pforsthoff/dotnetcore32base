@@ -26,7 +26,7 @@ namespace Cheetas3.EU.Infrastructure.Services
             var list = _client.ListNamespacedPod(@namespace);
             return list;
         }
-        public V1Deployment GetEUConverterDeployment()
+        public V1Deployment GetEUConverterDeployment(string sliceId)
         {
             V1Deployment deployment = new V1Deployment()
             {
@@ -83,15 +83,16 @@ namespace Cheetas3.EU.Infrastructure.Services
             };
             return deployment;
         }
-        public V1Job GetEUConverterJob()
+        public V1Job GetEUConverterJob(int id)
         {
             V1Job job = new V1Job()
             {
                 ApiVersion = "batch/v1",
                 Kind = V1Job.KubeKind,
-                Metadata = new V1ObjectMeta() { Name = "eu-converter-job" },
+                Metadata = new V1ObjectMeta() { Name = $"eu-converter-sliceid-{id}" },
                 Spec = new V1JobSpec()
                 {
+                    TtlSecondsAfterFinished = 0,
                     Template = new V1PodTemplateSpec()
                     {
                         Spec = new V1PodSpec()
@@ -100,10 +101,15 @@ namespace Cheetas3.EU.Infrastructure.Services
                                 {
                                     new V1Container()
                                     {
-                                        Image = "pguerette/euconverter",
-                                        Name = "eu-converter",
-                                        Command = new List<string>() { "/bin/bash", "-c", "--" },
-                                       
+                                        Image = "pguerette/euconverter:latest",
+                                        Name = $"eu-converter-sliceid-{id}",
+                                        //Command = new List<string>() { "/bin/bash", "-c", "--" },
+                                        Env =  new List<V1EnvVar>()
+                                        {
+                                            new V1EnvVar("SliceId", id.ToString()),
+                                            new V1EnvVar("ApiHealthUr", "http://localhost:5000/actuator/health"),
+                                            new V1EnvVar("SleepDuration", "600000")
+                                        }
                                     },
                                 },
                             RestartPolicy = "Never",
@@ -112,6 +118,11 @@ namespace Cheetas3.EU.Infrastructure.Services
                 }
             };
             return job;
+        }
+
+        public V1Deployment GetEUConverterDeployment()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
