@@ -1,0 +1,25 @@
+﻿apiVersion: v1
+kind: Pod
+metadata:
+  name: euconverter
+spec:
+  containers:
+  - name: euconverter
+    image: pforsthoff/euconverter:latest
+    volumeMounts:
+      - name: config-volume
+        mountPath: /app/appsettings.json
+        subPath: appsettings.json
+    imagePullPolicy: Always
+    env:
+      - name: SliceId
+        value: "8"
+      - name: ServiceHealthEndPoint
+        value: "http://localhost:5000/actuator/health"
+      - name: SleepDuration
+        value: "10000"
+  restartPolicy: Never
+  volumes:
+    - name: config-volume
+      configMap:
+        name: app-config
