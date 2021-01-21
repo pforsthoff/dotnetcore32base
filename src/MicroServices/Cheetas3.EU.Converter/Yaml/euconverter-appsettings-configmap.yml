@@ -1,0 +1,11 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Cheetas3.EU.Converter.Yaml
+{
+    public class euconverter_appsettings_configmap
+    {
+    }
+}
