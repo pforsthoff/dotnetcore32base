@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Cheetas3.EU.Application.Common.Exceptions;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using k8s.Models;
 
 namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
 {
@@ -84,8 +85,12 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
                     break;
                 case TargetPlatform.Kubernetes:
                     var client = _kubernetesService.GetKubernetesClient();
-                    var job = _kubernetesService.GetEUConverterJob();
-                    await client.CreateNamespacedJobWithHttpMessagesAsync(job,"default");
+                    V1Job job;
+                    foreach (var slice in entity.Slices.Where( r => r.Status == SliceStatus.Pending))
+                    {
+                        job = _kubernetesService.GetEUConverterJob(slice.Id);
+                        await client.CreateNamespacedJobWithHttpMessagesAsync(job, "default");
+                    }
                     break;
                 default:
                     break;

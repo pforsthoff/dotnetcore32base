@@ -26,7 +26,7 @@ namespace Cheetas3.EU.Infrastructure.Services
             var list = _client.ListNamespacedPod(@namespace);
             return list;
         }
-        public V1Deployment GetEUConverterDeployment()
+        public V1Deployment GetEUConverterDeployment(string sliceId)
         {
             V1Deployment deployment = new V1Deployment()
             {
@@ -83,35 +83,64 @@ namespace Cheetas3.EU.Infrastructure.Services
             };
             return deployment;
         }
-        public V1Job GetEUConverterJob()
+        public V1Job GetEUConverterJob(int id)
         {
             V1Job job = new V1Job()
             {
                 ApiVersion = "batch/v1",
                 Kind = V1Job.KubeKind,
-                Metadata = new V1ObjectMeta() { Name = "eu-converter-job" },
+                Metadata = new V1ObjectMeta() { Name = $"eu-converter-sliceid-{id}" },
                 Spec = new V1JobSpec()
                 {
+                    TtlSecondsAfterFinished = 0,
                     Template = new V1PodTemplateSpec()
                     {
                         Spec = new V1PodSpec()
                         {
                             Containers = new List<V1Container>()
+                            {
+                                new V1Container()
                                 {
-                                    new V1Container()
+                                    Image = "pforsthoff/euconverter:latest",
+                                    Name = $"eu-converter-sliceid-{id}",
+                                    //Command = new List<string>() { "/bin/bash", "-c", "--" },
+                                    Env = new List<V1EnvVar>()
                                     {
-                                        Image = "pguerette/euconverter",
-                                        Name = "eu-converter",
-                                        Command = new List<string>() { "/bin/bash", "-c", "--" },
-                                       
+                                        new V1EnvVar("SliceId", id.ToString()),
+                                        new V1EnvVar("ServiceHealthEndPoint", "http://localhost:5000/actuator/health"),
+                                        new V1EnvVar("SleepDuration", "60000")
+                                    },
+                                    VolumeMounts = new List<V1VolumeMount>()
+                                    {
+                                        new V1VolumeMount(
+                                                mountPath: "/app/appsettings.json",
+                                                name: "config-volume",
+                                                subPath: "appsettings.json")
                                     },
                                 },
+                            },
+                            Volumes = new List<V1Volume>()
+                            {
+                                new V1Volume()
+                                {
+                                    Name = "config-volume",
+                                    ConfigMap = new V1ConfigMapVolumeSource()
+                                    {
+                                        Name = "app-config"
+                                    }
+                                }
+                            },
                             RestartPolicy = "Never",
                         },
                     },
                 }
             };
             return job;
+        }
+
+        public V1Deployment GetEUConverterDeployment()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
