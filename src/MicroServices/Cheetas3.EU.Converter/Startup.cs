@@ -16,6 +16,7 @@ using Cheetas3.EU.Converter.Interfaces;
 using Cheetas3.EU.Persistance;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Cheetas3.EU.Converter
 {
@@ -56,8 +57,15 @@ namespace Cheetas3.EU.Converter
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
             services.AddHealthChecks().AddSqlServer(cstr);
 
+            var mqUri = new Uri(Configuration.GetConnectionString("RabbitMQ"));
+            services.AddSingleton<IMessageQueueService, MessageQueueService>();
+            services.AddHealthChecks().AddRabbitMQ(mqUri);
+
             //The Order of ConversionService should be last in the service collection
             services.AddHostedService<ConversionService>();
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

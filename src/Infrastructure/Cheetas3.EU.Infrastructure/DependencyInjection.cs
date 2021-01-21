@@ -61,6 +61,8 @@ namespace Cheetas3.EU.Infrastructure
             services.AddScoped<IDomainEventService, DomainEventService>();
             services.AddScoped<IDockerService, DockerService>();
             services.AddScoped<IKubernetesService, KubernetesService>();
+            services.AddScoped<IMessageQueueService, MessageQueueService>();
+
             services
                 .AddDefaultIdentity<ApplicationUser>()
                 .AddRoles<IdentityRole>()

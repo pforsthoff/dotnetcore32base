@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Cheetas3.EU.Converter.Entities.Base;
+using System;
 using System.IO;
-using System.Text;
 using System.Runtime.Serialization.Json;
+using System.Text;
 
-
-namespace Cheetas3.EU.Application.Common.Extensions
+namespace Cheetas3.EU.Converter.Extensions
 {
     public static class JsonExtensions
     {
@@ -26,6 +26,17 @@ namespace Cheetas3.EU.Application.Common.Extensions
         {
             return ToJsonString(value);
         }
+
+        public static Byte[] ToMessage(this object entity)
+        {
+            var json = entity.ToJson();
+            return json.ToByteArray();
+        }
+
+        //public static string ToMessage<T>(this T entity) where T : Entity
+        //{
+        //    return entity.ToByteArray();
+        //}
 
         public static string ToJsonString(object value)
         {

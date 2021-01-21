@@ -138,7 +138,7 @@ export interface IFilesClient {
     getById(id: number): Observable<FileDto>;
     update(id: number, command: UpdateFileCommand): Observable<FileResponse>;
     delete(id: number): Observable<FileResponse>;
-    createJob(id: number | undefined, sliceDuration: number | undefined): Observable<FileResponse>;
+    provisionFile(id: number | undefined, sliceDuration: number | undefined): Observable<FileResponse>;
 }
 
 @Injectable({
@@ -411,8 +411,8 @@ export class FilesClient implements IFilesClient {
         return _observableOf<FileResponse>(<any>null);
     }
 
-    createJob(id: number | undefined, sliceDuration: number | undefined): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Files/createjob?";
+    provisionFile(id: number | undefined, sliceDuration: number | undefined): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Files/provisionfile?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
@@ -432,11 +432,11 @@ export class FilesClient implements IFilesClient {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCreateJob(response_);
+            return this.processProvisionFile(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processCreateJob(<any>response_);
+                    return this.processProvisionFile(<any>response_);
                 } catch (e) {
                     return <Observable<FileResponse>><any>_observableThrow(e);
                 }
@@ -445,7 +445,7 @@ export class FilesClient implements IFilesClient {
         }));
     }
 
-    protected processCreateJob(response: HttpResponseBase): Observable<FileResponse> {
+    protected processProvisionFile(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :

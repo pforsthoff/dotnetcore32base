@@ -231,12 +231,12 @@
         }
       }
     },
-    "/api/Files/createjob": {
+    "/api/Files/provisionfile": {
       "post": {
         "tags": [
           "Files"
         ],
-        "operationId": "Files_CreateJob",
+        "operationId": "Files_ProvisionFile",
         "parameters": [
           {
             "name": "id",

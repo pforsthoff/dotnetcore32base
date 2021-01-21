@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using Cheetas3.EU.Converter.Interfaces;
 using Cheetas3.EU.Converter.Entities;
 using Cheetas3.EU.Converter.Enums;
+using Cheetas3.EU.Converter.Extensions;
 
 namespace Cheetas3.EU.Converter.Services
 {
@@ -18,17 +19,20 @@ namespace Cheetas3.EU.Converter.Services
     {
         private readonly IHostApplicationLifetime _applicationLifetime;
         private readonly IConfigurationService _configurationService;
+        private readonly IMessageQueueService _messageQueueService;
         private readonly ILogger<ConversionService> _logger;
         private readonly IApplicationDbContext _context;
         private Timer _timer;
         private Slice _slice;
 
         public ConversionService(IConfigurationService configurationService,
+                                 IMessageQueueService messageQueueService,
                                  ILogger<ConversionService> logger,
                                  IApplicationDbContext context,
                                  IHostApplicationLifetime applicationLifetime)
         {
             _configurationService = configurationService;
+            _messageQueueService = messageQueueService;
             _logger = logger;
             _context = context;
             _applicationLifetime = applicationLifetime;
@@ -73,6 +77,15 @@ namespace Cheetas3.EU.Converter.Services
         }
         private void DoConversion()
         {
+            //If 0 is passed into config.service, we're not doing any updates
+
+            var slice = new Slice
+            {
+                Id = _configurationService.SliceId,
+                Status = SliceStatus.Running
+            };
+
+
             _slice = _context.Slices
                 .Where(x => x.Id == _configurationService.SliceId).Include(i => i.Job.Slices)
                 .SingleOrDefault();
@@ -83,8 +96,14 @@ namespace Cheetas3.EU.Converter.Services
 
             if (_slice.Status == SliceStatus.Pending)
             {
+                //_messageQueueService.PublishMessage($"Converter Started for SliceID:{_configurationService.SliceId}");
                 _slice.Status = SliceStatus.Running;
                 _slice.SliceStarted = DateTime.Now;
+
+                var json = slice.ToJson();
+                var msg = json.ToMessage();
+
+                _messageQueueService.PublishMessage(msg);
                 _context.Slices.Update(_slice);
                 _context.SaveChangesAsync(new CancellationToken());
                 _configurationService.ServiceInfoStatus = ServiceInfoStatus.Running;
@@ -93,8 +112,13 @@ namespace Cheetas3.EU.Converter.Services
                 Thread.Sleep(_configurationService.SleepDuration);
 
                 //Complete Slice Conversion
+                //_messageQueueService.PublishMessage($"Converter Completed for SliceID:{_configurationService.SliceId}");
                 _slice.Status = SliceStatus.Completed;
                 _slice.SliceCompleted = DateTime.Now;
+
+                json = slice.ToJson();
+                msg = json.ToMessage();
+                _messageQueueService.PublishMessage(msg);
                 _context.Slices.Update(_slice);
                 _context.SaveChangesAsync(new CancellationToken());
 
@@ -154,7 +178,6 @@ namespace Cheetas3.EU.Converter.Services
             _logger.LogInformation("Conversion Service is stopping.");
             return Task.CompletedTask;
         }
-
         public void Dispose()
         {
             _timer?.Dispose();

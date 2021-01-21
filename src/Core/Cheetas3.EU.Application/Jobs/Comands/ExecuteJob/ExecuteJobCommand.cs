@@ -22,16 +22,27 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
         private readonly IApplicationDbContext _context;
         private readonly IDockerService _dockerService;
         private readonly IKubernetesService _kubernetesService;
+        private readonly IMessageQueueService _messageQueueService;
         private readonly IDateTime _dateTime;
 
-        public ExecuteJobCommandHandler(IApplicationDbContext context, IDockerService dockerService, 
-                                        IKubernetesService kubernetesService, IDateTime dateTime)
+        public ExecuteJobCommandHandler(IApplicationDbContext context, IDockerService dockerService,
+                                        IKubernetesService kubernetesService, IDateTime dateTime,
+                                        IMessageQueueService messageQueueService)
         {
             _context = context;
             _dockerService = dockerService;
             _kubernetesService = kubernetesService;
+            _messageQueueService = messageQueueService;
             _dateTime = dateTime;
+
+           // messageQueueService.MessageReceived += MessageQueueService_MessageReceived;
         }
+
+        private void MessageQueueService_MessageReceived(object sender, System.EventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public async Task<int> Handle(ExecuteJobCommand request, CancellationToken cancellationToken)
         {
 
@@ -53,6 +64,7 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
             switch (platform)
             {
                 case TargetPlatform.HostOS:
+                    _messageQueueService.ConsumeMessage();
                     break;
                 case TargetPlatform.Docker:
                     //_dockerService.CreateDockerClient("http://192.168.1.20:2375");
@@ -78,8 +90,14 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
                 default:
                     break;
             }
-           
+
             return 1;
         }
+
+        private void DoThatDockerThing()
+        { 
+
+        }
+
     }
 }

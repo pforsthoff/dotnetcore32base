@@ -50,9 +50,8 @@ namespace Cheetas3.EU.Controllers
             return NoContent();
         }
 
-        //[Route("api/[controller]/createjob")]
-        [HttpPost("createjob")]
-        public async Task<ActionResult> CreateJob(int id, int sliceDuration)
+        [HttpPost("provisionfile")]
+        public async Task<ActionResult> ProvisionFile(int id, int sliceDuration)
         {
             await Mediator.Send(new ProvisionFileCommand { Id = id, SliceDuration = sliceDuration });
             return NoContent();
