@@ -98,20 +98,38 @@ namespace Cheetas3.EU.Infrastructure.Services
                         Spec = new V1PodSpec()
                         {
                             Containers = new List<V1Container>()
+                            {
+                                new V1Container()
                                 {
-                                    new V1Container()
+                                    Image = "pforsthoff/euconverter:latest",
+                                    Name = $"eu-converter-sliceid-{id}",
+                                    //Command = new List<string>() { "/bin/bash", "-c", "--" },
+                                    Env = new List<V1EnvVar>()
                                     {
-                                        Image = "pguerette/euconverter:latest",
-                                        Name = $"eu-converter-sliceid-{id}",
-                                        //Command = new List<string>() { "/bin/bash", "-c", "--" },
-                                        Env =  new List<V1EnvVar>()
-                                        {
-                                            new V1EnvVar("SliceId", id.ToString()),
-                                            new V1EnvVar("ApiHealthUr", "http://localhost:5000/actuator/health"),
-                                            new V1EnvVar("SleepDuration", "600000")
-                                        }
+                                        new V1EnvVar("SliceId", id.ToString()),
+                                        new V1EnvVar("ServiceHealthEndPoint", "http://localhost:5000/actuator/health"),
+                                        new V1EnvVar("SleepDuration", "60000")
+                                    },
+                                    VolumeMounts = new List<V1VolumeMount>()
+                                    {
+                                        new V1VolumeMount(
+                                                mountPath: "/app/appsettings.json",
+                                                name: "config-volume",
+                                                subPath: "appsettings.json")
                                     },
                                 },
+                            },
+                            Volumes = new List<V1Volume>()
+                            {
+                                new V1Volume()
+                                {
+                                    Name = "config-volume",
+                                    ConfigMap = new V1ConfigMapVolumeSource()
+                                    {
+                                        Name = "app-config"
+                                    }
+                                }
+                            },
                             RestartPolicy = "Never",
                         },
                     },

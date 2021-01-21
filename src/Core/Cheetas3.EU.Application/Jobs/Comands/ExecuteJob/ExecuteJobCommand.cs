@@ -74,7 +74,7 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
                 case TargetPlatform.Kubernetes:
                     var client = _kubernetesService.GetKubernetesClient();
                     V1Job job;
-                    foreach (var slice in entity.Slices)
+                    foreach (var slice in entity.Slices.Where( r => r.Status == SliceStatus.Pending))
                     {
                         job = _kubernetesService.GetEUConverterJob(slice.Id);
                         await client.CreateNamespacedJobWithHttpMessagesAsync(job, "default");
