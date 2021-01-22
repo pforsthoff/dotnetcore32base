@@ -28,8 +28,4 @@
     <PackageReference Include="Steeltoe.Extensions.Logging.DynamicLogger" Version="3.0.2" />
     <PackageReference Include="Steeltoe.Management.CloudFoundryCore" Version="3.0.2" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Yaml\" />
-  </ItemGroup>
 </Project>
