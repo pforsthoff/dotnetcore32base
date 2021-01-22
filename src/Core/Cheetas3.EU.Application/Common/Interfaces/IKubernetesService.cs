@@ -10,5 +10,6 @@ namespace Cheetas3.EU.Application.Common.Interfaces
         V1Deployment GetEUConverterDeployment(string sliceId);
         V1Job GetEUConverterJob(int id);
         V1Job GetEUConverterAppSettingsSecret(int id);
+        void CreateKubernetesSecretFromAppsettiings();
     }
 }

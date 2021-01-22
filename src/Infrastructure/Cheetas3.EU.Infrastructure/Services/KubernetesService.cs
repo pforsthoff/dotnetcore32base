@@ -117,6 +117,7 @@ namespace Cheetas3.EU.Infrastructure.Services
                                                 name: "config-volume",
                                                 subPath: "appsettings.json")
                                     },
+                                    ImagePullPolicy = "Always",
                                 },
                             },
                             Volumes = new List<V1Volume>()
