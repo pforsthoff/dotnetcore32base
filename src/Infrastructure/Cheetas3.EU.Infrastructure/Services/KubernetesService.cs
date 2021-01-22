@@ -10,7 +10,7 @@ namespace Cheetas3.EU.Infrastructure.Services
     {
         private readonly ILogger<KubernetesService> _logger;
         private readonly IKubernetes _client;
-        public KubernetesService (ILogger<KubernetesService> logger)
+        public KubernetesService(ILogger<KubernetesService> logger)
         {
             var config = KubernetesClientConfiguration.BuildConfigFromConfigFile("assets/config");
             _client = new Kubernetes(config);
@@ -138,10 +138,13 @@ namespace Cheetas3.EU.Infrastructure.Services
             };
             return job;
         }
-
-        public V1Deployment GetEUConverterDeployment()
+        public V1Job GetEUConverterAppSettingsSecret(int id)
         {
-            throw new System.NotImplementedException();
+            V1Secret secret = new V1Secret()
+            {
+
+            };
+            return null;
         }
     }
 }
