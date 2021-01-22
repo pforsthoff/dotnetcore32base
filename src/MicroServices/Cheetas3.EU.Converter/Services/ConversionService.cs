@@ -55,7 +55,7 @@ namespace Cheetas3.EU.Converter.Services
             if (status == ServiceHealthStatus.Up)
             {
                 _timer.Dispose();
-                DoConversionAsync();
+                DoConversion();
                 ShutDownApp();
             }
         }
@@ -76,7 +76,7 @@ namespace Cheetas3.EU.Converter.Services
 
             _logger.LogInformation("Updated Configuration Service Properties");
         }
-        private async Task DoConversionAsync()
+        private void DoConversion()
         {
             //If 0 is passed into config.service, we're not doing any updates
             _slice = _context.Slices
@@ -93,8 +93,8 @@ namespace Cheetas3.EU.Converter.Services
                 _slice.SliceStarted = DateTime.Now;
                 _messageQueueService.PublishMessage(_slice.ToMessage());
 
-                _context.Slices.Update(_slice);
-                await _context.SaveChangesAsync(new CancellationToken());
+                //_context.Slices.Update(_slice);
+                //await _context.SaveChangesAsync(new CancellationToken());
                 _configurationService.ServiceInfoStatus = ServiceInfoStatus.Running;
                 _logger.LogInformation($"SliceId {_slice.Id} conversion has started.");
 
@@ -105,8 +105,8 @@ namespace Cheetas3.EU.Converter.Services
                 _slice.SliceCompleted = DateTime.Now;
                 _messageQueueService.PublishMessage(_slice.ToMessage());
 
-                _context.Slices.Update(_slice);
-                await _context.SaveChangesAsync(new CancellationToken());
+                //_context.Slices.Update(_slice);
+                // _context.SaveChangesAsync(new CancellationToken());
                 _configurationService.ServiceInfoStatus = ServiceInfoStatus.CompletedSuccessfully;
                 _logger.LogInformation($"SliceId {_slice.Id} conversion has completed.");
             }
@@ -120,8 +120,8 @@ namespace Cheetas3.EU.Converter.Services
         {
             var status = ServiceHealthStatus.Down;
             var webRequest = WebRequest.Create(_configurationService.ServiceHealthEndPoint);
-            //TODO: Make this a Configuration Service Parameter
-            int retryCount = 0;
+            int retryCountAttempts = 0;
+            int retryCount = _configurationService.RetryCount;
             try
             {
                 var stream = webRequest.GetResponse().GetResponseStream();
@@ -158,10 +158,10 @@ namespace Cheetas3.EU.Converter.Services
             catch (ServiceDownException ex)
             {
                 //Retry
-                retryCount++;
+                retryCountAttempts++;
                 _logger.LogError($"Service Health is a Reporting Down Status, exception iteration:{retryCount}.", ex);
 
-                if (retryCount > 4)
+                if (retryCount > retryCountAttempts)
                 {
                     _logger.LogError($"Too many retries, stopping service.");
                     StopAsync(new CancellationToken());
