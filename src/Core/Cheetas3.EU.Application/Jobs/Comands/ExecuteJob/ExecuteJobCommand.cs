@@ -9,6 +9,7 @@ using Cheetas3.EU.Application.Common.Exceptions;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using k8s.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
 {
@@ -25,18 +26,27 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
         private readonly IKubernetesService _kubernetesService;
         private readonly IMessageQueueService _messageQueueService;
         private readonly IDateTime _dateTime;
+        private readonly ILogger<ExecuteJobCommandHandler> _logger;
 
         public ExecuteJobCommandHandler(IApplicationDbContext context, IDockerService dockerService,
                                         IKubernetesService kubernetesService, IDateTime dateTime,
-                                        IMessageQueueService messageQueueService)
+                                        IMessageQueueService messageQueueService, ILogger<ExecuteJobCommandHandler> logger)
         {
             _context = context;
             _dockerService = dockerService;
             _kubernetesService = kubernetesService;
             _messageQueueService = messageQueueService;
             _dateTime = dateTime;
+            _logger = logger;
+            _messageQueueService.MessageReceivedEventHandler += _messageQueueService_MessageReceivedEventHandler;
 
-           // messageQueueService.MessageReceived += MessageQueueService_MessageReceived;
+        }
+
+        private void _messageQueueService_MessageReceivedEventHandler(object sender, Common.Events.MessageEntityEventArgs<Slice> e)
+        {
+            var slice = e.Entity;
+
+            _logger.LogInformation($"Event from Message Service with SliceID:{slice.Id} was received.");
         }
 
         private void MessageQueueService_MessageReceived(object sender, System.EventArgs e)

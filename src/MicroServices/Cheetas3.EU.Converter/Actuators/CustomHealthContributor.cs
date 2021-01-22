@@ -1,7 +1,6 @@
 ﻿using Steeltoe.Common.HealthChecks;
 
-namespace Cheetas3.EU.Converter
-    .Actuators
+namespace Cheetas3.EU.Converter.Actuators
 {
     public class CustomHealthContributor : IHealthContributor
     {
@@ -16,6 +15,7 @@ namespace Cheetas3.EU.Converter
                 Description = "This health check does not check anything"
             };
             result.Details.Add("status", HealthStatus.UP.ToString());
+            result.Details.Add("description", "Something Descriptive.");
             return result;
         }
     }

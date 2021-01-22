@@ -12,7 +12,7 @@ using System.Text;
 
 namespace Cheetas3.EU.Infrastructure.Services
 {
-
+    
     public class MessageQueueService : IMessageQueueService
     {
         private readonly ILogger<MessageQueueService> _logger;
@@ -23,7 +23,7 @@ namespace Cheetas3.EU.Infrastructure.Services
         private static readonly string _queueName = "cheetas3.eu.queue";
         private static readonly string _routingKey = "cheetas3.eu.routingkey";
 
-        //public event EventHandler MessageReceived;
+        public event MessageReceivedEventHandler MessageReceivedEventHandler;
 
         public MessageQueueService(IConfiguration configuration,
                                    IApplicationDbContext context,
@@ -58,13 +58,6 @@ namespace Cheetas3.EU.Infrastructure.Services
             }
         }
 
-        private void Consumer_Received(object sender, BasicDeliverEventArgs e)
-        {
-            var array = e.Body.ToArray();
-            var json = array.ToMessageString();
-            Slice slice = json.FromJson(typeof(Slice)) as Slice;
-        }
-
         private void DeclareBindExchangeAndQueue()
         {
             _model.ExchangeDeclare(_exchangeName, ExchangeType.Direct);
@@ -72,10 +65,24 @@ namespace Cheetas3.EU.Infrastructure.Services
             _model.QueueBind(_queueName, _exchangeName, _routingKey);
         }
 
-        //private void Consumer_Received(object sender, SliceEventArgs e)
-        //{
-        //    OnMessageReceived(e);
-        //}
+        private void Consumer_Received(object sender, BasicDeliverEventArgs e)
+        {
+            var array = e.Body.ToArray();
+            var json = array.ToMessageString();
+            Slice slice = json.FromJson(typeof(Slice)) as Slice;
+
+            var args = new MessageEntityEventArgs<Slice>
+            {
+                Entity = slice
+            };
+            OnMessageReceived(args);
+        }
+
+        protected virtual void OnMessageReceived(MessageEntityEventArgs<Slice> e)
+        {
+            MessageReceivedEventHandler handler = MessageReceivedEventHandler;
+            handler?.Invoke(this, e);
+        }
 
         public void PublishMessage(string message)
         {
@@ -89,11 +96,5 @@ namespace Cheetas3.EU.Infrastructure.Services
         {
             var t = 1;
         }
-
-        //protected virtual void OnMessageReceived(SliceEventArgs e)
-        //{
-        //    EventHandler handler = MessageReceived;
-        //    handler?.Invoke(this, e);
-        //}
     }
 }

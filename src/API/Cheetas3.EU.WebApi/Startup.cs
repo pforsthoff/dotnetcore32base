@@ -34,12 +34,16 @@ namespace Cheetas3.EU
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddSingleton<IConfigurationProvisioningService, ConfigurationProvisioningService>();
+
             var cstr = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddHealthActuator(Configuration);
             services.AddSingleton<IHealthContributor, CustomHealthContributor>();
             services.AddInfoActuator(Configuration);
-            services.AddSingleton<IInfoContributor, ArbitraryInfoContributor>();
+            //services.AddSingleton<IInfoContributor, ArbitraryInfoContributor>();
+            services.AddSingleton<IInfoContributor, ProvisioningServiceInfoContributor>();
             services.AddSingleton<IFileProvisioningService, FileProvisioningService>();
 
             services.AddHealthChecks().AddSqlServer(cstr);
