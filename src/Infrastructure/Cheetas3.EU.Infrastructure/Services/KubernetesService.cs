@@ -101,7 +101,7 @@ namespace Cheetas3.EU.Infrastructure.Services
                             {
                                 new V1Container()
                                 {
-                                    Image = "pforsthoff/euconverter:latest",
+                                    Image = "pguerette/euconverter:latest",
                                     Name = $"eu-converter-sliceid-{id}",
                                     //Command = new List<string>() { "/bin/bash", "-c", "--" },
                                     Env = new List<V1EnvVar>()

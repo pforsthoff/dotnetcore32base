@@ -68,20 +68,7 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
                     _messageQueueService.ConsumeMessage();
                     break;
                 case TargetPlatform.Docker:
-                    //_dockerService.CreateDockerClient("http://192.168.1.20:2375");
-                    _dockerService.CreateDockerClient();
-                    var imageName = "pguerette/euconverter:latest";
-                    await _dockerService.PullImageAsync(imageName);
-
-                    var envVariables = new List<string>();
-                    envVariables.Add($"SleepDuration=300000");
-                    envVariables.Add($"ServiceHealthEndPoint=http://localhost:5000/actuator/health");
-                    foreach (var slice in entity.Slices)
-                    {
-                        envVariables.Add($"SliceId={slice.Id}");
-                        await _dockerService.CreateAndStartContainerAsync(imageName, envVariables);
-                        envVariables.RemoveAt(2);
-                    }
+                    _ = ExecuteJobWithDockerAsync(entity);
                     break;
                 case TargetPlatform.Kubernetes:
                     var client = _kubernetesService.GetKubernetesClient();
@@ -99,8 +86,25 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
             return 1;
         }
 
-        private void DoThatDockerThing()
-        { 
+        private async Task ExecuteJobWithDockerAsync(Job entity)
+        {
+            //_dockerService.CreateDockerClient("http://192.168.1.20:2375");
+            _dockerService.CreateDockerClient();
+            var imageName = "pguerette/euconverter:latest";
+            await _dockerService.PullImageAsync(imageName);
+
+            var envVariables = new List<string>
+            {
+                $"SleepDuration=300000",
+                $"ServiceHealthEndPoint=http://localhost:5000/actuator/health"
+            };
+
+            foreach (var slice in entity.Slices)
+            {
+                envVariables.Add($"SliceId={slice.Id}");
+                await _dockerService.CreateAndStartContainerAsync(imageName, envVariables);
+                envVariables.RemoveAt(2);
+            }
 
         }
 

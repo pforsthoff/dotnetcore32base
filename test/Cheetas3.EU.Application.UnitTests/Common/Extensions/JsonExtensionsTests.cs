@@ -1,5 +1,6 @@
 ﻿using Cheetas3.EU.Application.Common.Extensions;
 using Cheetas3.EU.Domain.Entities;
+using Cheetas3.EU.Domain.Entities.Base;
 using Cheetas3.EU.Domain.Enums;
 using FluentAssertions;
 using NUnit.Framework;
@@ -20,6 +21,11 @@ namespace Cheetas3.EU.Application.UnitTests.Common.Extensions
             {
                 Id = 1,
                 JobId = 1,
+                Job = new Job
+                {
+                    Id = 1
+                },
+
                 Status = SliceStatus.Completed,
                 SliceStarted = DateTime.Now,
                 EndTime = DateTime.Now,
@@ -34,14 +40,14 @@ namespace Cheetas3.EU.Application.UnitTests.Common.Extensions
         }
 
         [Test]
-        public void CanSerializeAnObject()
+        public void CanSerializeObjectToJson()
         {
             var sliceJson = _slice.ToJson();
             sliceJson.Should().ContainEquivalentOf(_sliceJson);
         }
 
         [Test]
-        public void CanDeserializeAnObject()
+        public void CanDeserializeObjectFromJson()
         {
             Slice slice = (Slice)_sliceJson.FromJson(typeof(Slice));
             slice.Should().NotBeNull();
@@ -50,5 +56,18 @@ namespace Cheetas3.EU.Application.UnitTests.Common.Extensions
             bool equals = slice == _slice;
             equals.Should().BeFalse();
         }
+
+        //[Test]
+        //public void CanSerializeDeserializeObjectFromByteArray()
+        //{
+        //    var t = new Entity();
+        //    t.Tome
+        //    var json = _slice.ToMessage
+        //    var message = json.ToByteArray();
+        //    var msgJson = message.ToMessageString();
+        //    var slice = msgJson.FromJson(typeof(Slice)) as Slice;
+
+        //    slice.Id.Should().Equals(_slice.Id);
+        //}
     }
 }

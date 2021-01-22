@@ -21,7 +21,6 @@ namespace Cheetas3.EU.Converter.Services
         public int Id { get; set; }
         public int SliceCount { get; set; }
 
-        //public ConfigurationService(IConfiguration configuration)
         public ConfigurationService(IConfiguration configuration, ILogger<ConfigurationService> logger)
         {
             Configuration = configuration;

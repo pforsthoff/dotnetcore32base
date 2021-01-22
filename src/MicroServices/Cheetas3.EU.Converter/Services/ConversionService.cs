@@ -78,14 +78,6 @@ namespace Cheetas3.EU.Converter.Services
         private void DoConversion()
         {
             //If 0 is passed into config.service, we're not doing any updates
-
-            var slice = new Slice
-            {
-                Id = _configurationService.SliceId,
-                Status = SliceStatus.Running
-            };
-
-
             _slice = _context.Slices
                 .Where(x => x.Id == _configurationService.SliceId).Include(i => i.Job.Slices)
                 .SingleOrDefault();
@@ -96,14 +88,10 @@ namespace Cheetas3.EU.Converter.Services
 
             if (_slice.Status == SliceStatus.Pending)
             {
-                //_messageQueueService.PublishMessage($"Converter Started for SliceID:{_configurationService.SliceId}");
                 _slice.Status = SliceStatus.Running;
                 _slice.SliceStarted = DateTime.Now;
+                _messageQueueService.PublishMessage(_slice.ToMessage());
 
-                var json = slice.ToJson();
-                var msg = json.ToMessage();
-
-                _messageQueueService.PublishMessage(msg);
                 _context.Slices.Update(_slice);
                 _context.SaveChangesAsync(new CancellationToken());
                 _configurationService.ServiceInfoStatus = ServiceInfoStatus.Running;
@@ -112,16 +100,12 @@ namespace Cheetas3.EU.Converter.Services
                 Thread.Sleep(_configurationService.SleepDuration);
 
                 //Complete Slice Conversion
-                //_messageQueueService.PublishMessage($"Converter Completed for SliceID:{_configurationService.SliceId}");
                 _slice.Status = SliceStatus.Completed;
                 _slice.SliceCompleted = DateTime.Now;
+                _messageQueueService.PublishMessage(_slice.ToMessage());
 
-                json = slice.ToJson();
-                msg = json.ToMessage();
-                _messageQueueService.PublishMessage(msg);
                 _context.Slices.Update(_slice);
                 _context.SaveChangesAsync(new CancellationToken());
-
                 _configurationService.ServiceInfoStatus = ServiceInfoStatus.CompletedSuccessfully;
                 _logger.LogInformation($"SliceId {_slice.Id} conversion has completed.");
             }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
+using System.Linq;
 using System.Text;
 
 namespace Cheetas3.EU.Infrastructure.Services
@@ -59,10 +60,9 @@ namespace Cheetas3.EU.Infrastructure.Services
 
         private void Consumer_Received(object sender, BasicDeliverEventArgs e)
         {
-            var msg = e.Body.ToArray();
-            var msgJson = msg.ToMessageString();
-            var slice = (Slice)msgJson.FromJson(typeof(Slice));
-            _logger.LogInformation($"Slice ID:{slice.Id} sent status update of {slice.Status} from RabbitMQ");
+            var array = e.Body.ToArray();
+            var json = array.ToMessageString();
+            Slice slice = json.FromJson(typeof(Slice)) as Slice;
         }
 
         private void DeclareBindExchangeAndQueue()

@@ -53,7 +53,7 @@ namespace Cheetas3.EU.Converter
 #if DEBUG
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
 #endif
-                .UseSqlServer(cstr),ServiceLifetime.Transient);
+                .UseSqlServer(cstr), ServiceLifetime.Singleton);
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
             services.AddHealthChecks().AddSqlServer(cstr);
 

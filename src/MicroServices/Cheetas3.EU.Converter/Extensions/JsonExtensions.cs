@@ -8,7 +8,6 @@ namespace Cheetas3.EU.Converter.Extensions
 {
     public static class JsonExtensions
     {
-
         public static object FromJson(this string json, Type type)
         {
             return FromJsonString(json, type);
@@ -16,7 +15,7 @@ namespace Cheetas3.EU.Converter.Extensions
 
         public static object FromJsonString(string json, Type type)
         {
-            using var ms = new MemoryStream(Encoding.Unicode.GetBytes(json));
+            using var ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
             var ser = new DataContractJsonSerializer(type);
             var value = ser.ReadObject(ms);
             return value;
@@ -27,23 +26,12 @@ namespace Cheetas3.EU.Converter.Extensions
             return ToJsonString(value);
         }
 
-        public static Byte[] ToMessage(this object entity)
-        {
-            var json = entity.ToJson();
-            return json.ToByteArray();
-        }
-
-        //public static string ToMessage<T>(this T entity) where T : Entity
-        //{
-        //    return entity.ToByteArray();
-        //}
-
         public static string ToJsonString(object value)
         {
             var ser = new DataContractJsonSerializer(value.GetType());
             using var ms = new MemoryStream();
             ser.WriteObject(ms, value);
-            var json = Encoding.Default.GetString(ms.ToArray());
+            var json = Encoding.UTF8.GetString(ms.ToArray());
             return json;
         }
     }
