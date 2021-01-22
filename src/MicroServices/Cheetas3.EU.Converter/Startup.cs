@@ -63,9 +63,6 @@ namespace Cheetas3.EU.Converter
 
             //The Order of ConversionService should be last in the service collection
             services.AddHostedService<ConversionService>();
-
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

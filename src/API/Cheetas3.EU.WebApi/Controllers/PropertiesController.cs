@@ -3,7 +3,7 @@
 namespace Cheetas3.EU.Controllers
 {
 
-    public class CommandsController : ApiControllerBase
+    public class PropertiesController : ApiControllerBase
     {
         [HttpGet("createjob/{id}")]
         public ActionResult CreateJob(int id)
