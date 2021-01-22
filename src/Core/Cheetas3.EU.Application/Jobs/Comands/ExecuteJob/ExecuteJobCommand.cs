@@ -69,7 +69,7 @@ namespace Cheetas3.EU.Application.Jobs.Comands.ExecuteJob
 
             entity.Status = JobStatus.InProgress;
             entity.StartedDateTime = _dateTime.Now;
-            await _context.SaveChangesAsync(cancellationToken);
+            //await _context.SaveChangesAsync(cancellationToken);
 
             var platform = request.TargetPlatform;
             switch (platform)

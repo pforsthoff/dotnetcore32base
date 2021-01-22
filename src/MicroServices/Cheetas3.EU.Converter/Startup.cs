@@ -32,34 +32,34 @@ namespace Cheetas3.EU.Converter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var cstrSql = Configuration.GetConnectionString("DefaultConnection");
+            var cstrRmq = new Uri(Configuration.GetConnectionString("RabbitMQ"));
 
+            //Application Services
+            services.AddTransient<IDateTime, DateTimeService>();
             services.AddSingleton<IConfigurationService, ConfigurationService>();
+            services.AddSingleton<IMessageQueueService, MessageQueueService>();
 
-            services.AddControllers().AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            });
-
+            //DBContext
+            services.AddDbContext<ApplicationDbContext>(opt => opt
+#if DEBUG
+                .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
+#endif
+                .UseSqlServer(cstrSql));
+            services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
+            //Custom Actuators
             services.AddHealthActuator(Configuration);
             services.AddSingleton<IHealthContributor, CustomHealthContributor>();
             services.AddInfoActuator(Configuration);
             services.AddSingleton<IInfoContributor, ConversionServiceInfoContributor>();
 
-            //Sql Server Database Stuff
-            var cstr = Configuration.GetConnectionString("DefaultConnection");
-            services.AddTransient<IDateTime, DateTimeService>();
-            services.AddDbContext<ApplicationDbContext>(opt => opt
-#if DEBUG
-                .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
-#endif
-                .UseSqlServer(cstr), ServiceLifetime.Singleton);
-            services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
-            services.AddHealthChecks().AddSqlServer(cstr);
+            //Health Checks
+            services.AddHealthChecks().AddCheck("RabbitMq Ping (100)", new PingHealthCheck("cheetasv3rbt", 100));
+            services.AddHealthChecks().AddCheck("SQLServer Ping (100)", new PingHealthCheck("cheetasv3sql", 100));
+            services.AddHealthChecks().AddRabbitMQ(cstrRmq);
+            services.AddHealthChecks().AddSqlServer(cstrSql);
 
-            var mqUri = new Uri(Configuration.GetConnectionString("RabbitMQ"));
-            services.AddSingleton<IMessageQueueService, MessageQueueService>();
-            services.AddHealthChecks().AddRabbitMQ(mqUri);
+
 
             //The Order of ConversionService should be last in the service collection
             services.AddHostedService<ConversionService>();

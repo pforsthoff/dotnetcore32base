@@ -12,14 +12,15 @@ namespace Cheetas3.EU.Converter.Services
 
         private readonly ILogger<ConfigurationService> _logger;
         public IConfiguration Configuration { get; }
-        public string ServiceHealthEndPoint { get; } = DEFAULT_HEALTH_ENDPOINT;
+        public string ServiceHealthEndPoint { get; set; } = DEFAULT_HEALTH_ENDPOINT;
         public string Status { get; set; }
         public int SliceId { get; set; }
-        public int SleepDuration { get; } = 300000;
+        public int SleepDuration { get; set; } = 300000;
         public ServiceInfoStatus ServiceInfoStatus { get; set; }
         public int JobId { get; set; }
         public int Id { get; set; }
         public int SliceCount { get; set; }
+        public int RetryCount { get; set; } = 5;
 
         public ConfigurationService(IConfiguration configuration, ILogger<ConfigurationService> logger)
         {
@@ -38,6 +39,13 @@ namespace Cheetas3.EU.Converter.Services
             {
                 SleepDuration = sleepDuration;
                 _logger.LogInformation($"SleepDuration Passed into Service. Value:{sleepDuration}");
+            }
+
+            int retryCount = Configuration.GetValue<int>("RetryCount");
+            if (retryCount != 0)
+            {
+                RetryCount = retryCount;
+                _logger.LogInformation($"RetryCount Passed into Service. Value:{retryCount}");
             }
 
             SliceId = Configuration.GetValue<int>("SliceId");

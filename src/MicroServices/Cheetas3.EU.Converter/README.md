@@ -9,3 +9,5 @@ Docker Run Command
 docker run -it -d 3d240efde245 -e SliceId=3 -e ApiHealthUrl="http://localhost:5000/actuator/health" -e SleepDuration=10000
 ```
 YAML Files for Kubernetes Deployments in YAML Folder
+docker run -it -d pguerette/euconverter:latest -e SliceId=3 [-e ServiceHealthEndPoint="http://localhost:5000/actuator/health"] [-e SleepDuration=10000] [-e RetryCount=5]
+```
