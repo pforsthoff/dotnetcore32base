@@ -7,7 +7,8 @@ namespace Cheetas3.EU.Application.Common.Interfaces
     {
         Kubernetes GetKubernetesClient();
         V1PodList GetPods(string @namespace);
-        V1Deployment GetEUConverterDeployment();
+        V1Deployment GetEUConverterDeployment(string sliceId);
         V1Job GetEUConverterJob(int id);
+        V1Job GetEUConverterAppSettingsSecret(int id);
     }
 }
