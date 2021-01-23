@@ -22,10 +22,10 @@ namespace Cheetas3.EU.Infrastructure.Services
         private readonly IDateTime _dateTime;
         private readonly ILogger<JobService> _logger;
         private readonly IMapper _mapper;
-        private Queue<Slice> _dockerQueue = new Queue<Slice>();
-        private Queue<Slice> _k8sQueue = new Queue<Slice>();
         private bool _dockerJobRunning;
         private bool _k8sJobRunning;
+        private readonly Queue<Slice> _dockerQueue = new Queue<Slice>();
+        private readonly Queue<Slice> _k8sQueue = new Queue<Slice>();
 
         public JobService(IApplicationDbContext context, IDockerService dockerService,
                           IKubernetesService kubernetesService, IDateTime dateTime,
@@ -70,11 +70,15 @@ namespace Cheetas3.EU.Infrastructure.Services
         private async Task messageQueueService_MessageReceivedEventHandlerAsync(object sender, MessageEntityEventArgs<Slice> e)
         {
             var slice = e.Entity;
+            var sliceCompleted = slice.Status == SliceStatus.Completed;
+
             _logger.LogInformation($"Event from Message Service with SliceID:{slice.Id}, {slice.Status} was received.");
+
+            if (sliceCompleted) slice.SliceCompleted = _dateTime.Now;
+
             await UpdateDatabaseAsync(slice);
 
-            if (slice.Status == SliceStatus.Completed)
-                await ProcessQueues(slice);
+            if (sliceCompleted) await ProcessQueues(slice);
         }
 
         private async Task ExecuteJobSliceWithDockerAsync()
@@ -82,6 +86,8 @@ namespace Cheetas3.EU.Infrastructure.Services
             var slice = _dockerQueue.Dequeue();
             slice.TargetPlatform = TargetPlatform.Docker;
             slice.Status = SliceStatus.Starting;
+            slice.SliceStarted = _dateTime.Now;
+
             await UpdateDatabaseAsync(slice);
 
             var envVariables = new List<string>
@@ -99,6 +105,8 @@ namespace Cheetas3.EU.Infrastructure.Services
             var slice = _k8sQueue.Dequeue();
             slice.TargetPlatform = TargetPlatform.Kubernetes;
             slice.Status = SliceStatus.Starting;
+            slice.SliceStarted = _dateTime.Now;
+
             await UpdateDatabaseAsync(slice);
 
             var client = _kubernetesService.GetKubernetesClient();
@@ -181,6 +189,7 @@ namespace Cheetas3.EU.Infrastructure.Services
         {
             var entity = await _context.Slices.FindAsync(slice.Id);
             entity.Status = slice.Status;
+            _logger.LogInformation($"Updating Slices Table SliceId:{entity.Id}, Status:{entity.Status}");
             //_mapper.Map(slice, entity);
             await SaveEntityUpdatesAsync();
         }
