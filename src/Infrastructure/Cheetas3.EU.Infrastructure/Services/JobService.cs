@@ -45,9 +45,7 @@ namespace Cheetas3.EU.Infrastructure.Services
 
         public async Task<JobStatus> ProcessJob(Job job, TargetPlatform platform)
         {
-            job.Status = JobStatus.InProgress;
-            job.StartedDateTime = _dateTime.Now;
-            await SaveEntityUpdatesAsync();
+
 
             switch (platform)
             {
@@ -83,7 +81,8 @@ namespace Cheetas3.EU.Infrastructure.Services
 
         private async Task ExecuteJobSliceWithDockerAsync()
         {
-            var slice = _dockerQueue.Dequeue();
+            var queuedSlice = _k8sQueue.Dequeue();
+            var slice = _context.Slices.Single(r => r.Id == queuedSlice.Id);
             slice.TargetPlatform = TargetPlatform.Docker;
             slice.Status = SliceStatus.Starting;
             slice.SliceStarted = _dateTime.Now;
@@ -102,7 +101,8 @@ namespace Cheetas3.EU.Infrastructure.Services
 
         private async Task ExecuteJobSliceWithKubernetesAsync()
         {
-            var slice = _k8sQueue.Dequeue();
+            var queuedSlice = _k8sQueue.Dequeue();
+            var slice = _context.Slices.Single(r => r.Id == queuedSlice.Id);
             slice.TargetPlatform = TargetPlatform.Kubernetes;
             slice.Status = SliceStatus.Starting;
             slice.SliceStarted = _dateTime.Now;

@@ -44,6 +44,10 @@ namespace Cheetas3.EU.Application.Features.Jobs.Comands.ExecuteJob
             if (job == null)
                 throw new NotFoundException(nameof(Job), request.Id);
 
+            job.Status = JobStatus.InProgress;
+            job.StartedDateTime = _dateTime.Now;
+            await _context.SaveChangesAsync(cancellationToken);
+
             return await _jobService.ProcessJob(job, request.TargetPlatform);
         }
     }
