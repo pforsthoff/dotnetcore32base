@@ -3,9 +3,10 @@ using System;
 using Cheetas3.EU.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Cheetas3.EU.Migrations
+namespace Cheetas3.EU.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -130,6 +131,9 @@ namespace Cheetas3.EU.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<int>("TargetPlatform")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("JobId");
@@ -137,7 +141,7 @@ namespace Cheetas3.EU.Migrations
                     b.ToTable("Slices");
                 });
 
-            modelBuilder.Entity("Cheetas3.EU.Infrastructure.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("Cheetas3.EU.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -473,7 +477,7 @@ namespace Cheetas3.EU.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Cheetas3.EU.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("Cheetas3.EU.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -482,7 +486,7 @@ namespace Cheetas3.EU.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Cheetas3.EU.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("Cheetas3.EU.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -497,7 +501,7 @@ namespace Cheetas3.EU.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Cheetas3.EU.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("Cheetas3.EU.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -506,7 +510,7 @@ namespace Cheetas3.EU.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Cheetas3.EU.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("Cheetas3.EU.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

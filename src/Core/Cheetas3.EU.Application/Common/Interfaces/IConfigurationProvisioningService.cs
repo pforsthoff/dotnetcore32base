@@ -10,5 +10,7 @@ namespace Cheetas3.EU.Application.Common.Interfaces
         public int MaxConcurrency { get; set; }
         public int SliceDurationInSeconds { get; set; }
         public int DevAttributeContainerLifeDuration { get; set; }
+        public int RetryCount { get; set; }
+        public string Image { get; set; }
     }
 }

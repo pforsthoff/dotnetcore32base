@@ -3,6 +3,7 @@
     public  enum SliceStatus
     {
         Pending,
+        Starting,
         Running,
         Completed
     }

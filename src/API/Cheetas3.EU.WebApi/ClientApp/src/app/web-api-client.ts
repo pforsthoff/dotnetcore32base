@@ -526,7 +526,7 @@ export class JobsClient implements IJobsClient {
 }
 
 export interface IParametersClient {
-    updateParameters(maxConcurrency: number | undefined, devAttributeContainerLifeDuration: number | undefined, sliceDurationInSeconds: number | undefined): Observable<FileResponse>;
+    updateParameters(maxConcurrency: number | undefined, devAttributeContainerLifeDuration: number | undefined, sliceDurationInSeconds: number | undefined, retryCount: number | undefined, image: string | null | undefined): Observable<FileResponse>;
 }
 
 @Injectable({
@@ -542,7 +542,7 @@ export class ParametersClient implements IParametersClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    updateParameters(maxConcurrency: number | undefined, devAttributeContainerLifeDuration: number | undefined, sliceDurationInSeconds: number | undefined): Observable<FileResponse> {
+    updateParameters(maxConcurrency: number | undefined, devAttributeContainerLifeDuration: number | undefined, sliceDurationInSeconds: number | undefined, retryCount: number | undefined, image: string | null | undefined): Observable<FileResponse> {
         let url_ = this.baseUrl + "/api/Parameters/updateparameters?";
         if (maxConcurrency === null)
             throw new Error("The parameter 'maxConcurrency' cannot be null.");
@@ -556,6 +556,12 @@ export class ParametersClient implements IParametersClient {
             throw new Error("The parameter 'sliceDurationInSeconds' cannot be null.");
         else if (sliceDurationInSeconds !== undefined)
             url_ += "sliceDurationInSeconds=" + encodeURIComponent("" + sliceDurationInSeconds) + "&";
+        if (retryCount === null)
+            throw new Error("The parameter 'retryCount' cannot be null.");
+        else if (retryCount !== undefined)
+            url_ += "retryCount=" + encodeURIComponent("" + retryCount) + "&";
+        if (image !== undefined && image !== null)
+            url_ += "image=" + encodeURIComponent("" + image) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1078,6 +1084,7 @@ export class Slice extends AuditableEntity implements ISlice {
     jobId?: number;
     job?: Job | undefined;
     status?: SliceStatus;
+    targetPlatform?: TargetPlatform;
     startTime?: Date;
     endTime?: Date;
     sliceStarted?: Date | undefined;
@@ -1094,6 +1101,7 @@ export class Slice extends AuditableEntity implements ISlice {
             this.jobId = _data["jobId"];
             this.job = _data["job"] ? Job.fromJS(_data["job"]) : <any>undefined;
             this.status = _data["status"];
+            this.targetPlatform = _data["targetPlatform"];
             this.startTime = _data["startTime"] ? new Date(_data["startTime"].toString()) : <any>undefined;
             this.endTime = _data["endTime"] ? new Date(_data["endTime"].toString()) : <any>undefined;
             this.sliceStarted = _data["sliceStarted"] ? new Date(_data["sliceStarted"].toString()) : <any>undefined;
@@ -1114,6 +1122,7 @@ export class Slice extends AuditableEntity implements ISlice {
         data["jobId"] = this.jobId;
         data["job"] = this.job ? this.job.toJSON() : <any>undefined;
         data["status"] = this.status;
+        data["targetPlatform"] = this.targetPlatform;
         data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
         data["endTime"] = this.endTime ? this.endTime.toISOString() : <any>undefined;
         data["sliceStarted"] = this.sliceStarted ? this.sliceStarted.toISOString() : <any>undefined;
@@ -1128,6 +1137,7 @@ export interface ISlice extends IAuditableEntity {
     jobId?: number;
     job?: Job | undefined;
     status?: SliceStatus;
+    targetPlatform?: TargetPlatform;
     startTime?: Date;
     endTime?: Date;
     sliceStarted?: Date | undefined;
@@ -1254,8 +1264,9 @@ export interface IFile extends IAuditableEntity {
 
 export enum SliceStatus {
     Pending = 0,
-    Running = 1,
-    Completed = 2,
+    Starting = 1,
+    Running = 2,
+    Completed = 3,
 }
 
 export enum TargetPlatform {
@@ -1270,6 +1281,7 @@ export class SliceDto extends AuditableEntity implements ISliceDto {
     job?: Job | undefined;
     status?: SliceStatus;
     sliceStatus?: string | undefined;
+    targetPlatform?: TargetPlatform;
     startTime?: Date;
     endTime?: Date;
     duration?: number;
@@ -1288,6 +1300,7 @@ export class SliceDto extends AuditableEntity implements ISliceDto {
             this.job = _data["job"] ? Job.fromJS(_data["job"]) : <any>undefined;
             this.status = _data["status"];
             this.sliceStatus = _data["sliceStatus"];
+            this.targetPlatform = _data["targetPlatform"];
             this.startTime = _data["startTime"] ? new Date(_data["startTime"].toString()) : <any>undefined;
             this.endTime = _data["endTime"] ? new Date(_data["endTime"].toString()) : <any>undefined;
             this.duration = _data["duration"];
@@ -1310,6 +1323,7 @@ export class SliceDto extends AuditableEntity implements ISliceDto {
         data["job"] = this.job ? this.job.toJSON() : <any>undefined;
         data["status"] = this.status;
         data["sliceStatus"] = this.sliceStatus;
+        data["targetPlatform"] = this.targetPlatform;
         data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
         data["endTime"] = this.endTime ? this.endTime.toISOString() : <any>undefined;
         data["duration"] = this.duration;
@@ -1326,6 +1340,7 @@ export interface ISliceDto extends IAuditableEntity {
     job?: Job | undefined;
     status?: SliceStatus;
     sliceStatus?: string | undefined;
+    targetPlatform?: TargetPlatform;
     startTime?: Date;
     endTime?: Date;
     duration?: number;

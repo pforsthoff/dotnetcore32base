@@ -16,6 +16,8 @@ namespace Cheetas3.EU.Application.Features.Parameters.Commands.UpdateParameters
         public int MaxConcurrency { get; set; }
         public int SliceDurationInSeconds { get; set; }
         public int DevAttributeContainerLifeDuration { get; set; }
+        public int RetryCount { get; set; }
+        public string Image { get; set; }
     }
 
     public class UpdateParametersCommandHandler : IRequestHandler<UpdateParametersCommand, string>
@@ -34,11 +36,15 @@ namespace Cheetas3.EU.Application.Features.Parameters.Commands.UpdateParameters
             //Not sure this is needed.  Slice duration is set in the Job Provisioning
             _configurationService.SliceDurationInSeconds = request.SliceDurationInSeconds;
             _configurationService.DevAttributeContainerLifeDuration = request.DevAttributeContainerLifeDuration;
+            _configurationService.RetryCount = request.RetryCount;
+            _configurationService.Image = request.Image;
 
 
             return $"MaxConcurrency:{_configurationService.MaxConcurrency}, " +
                    $"SliceDurationInSeconds:{_configurationService.SliceDurationInSeconds}, " +
-                   $"DevAttributeContainerLifeDuration:{_configurationService.DevAttributeContainerLifeDuration}";
+                   $"DevAttributeContainerLifeDuration:{_configurationService.DevAttributeContainerLifeDuration}, " +
+                   $"RetryCount:{_configurationService.RetryCount}, " +
+                   $"Image:{_configurationService.Image}";
         }
     }
 }

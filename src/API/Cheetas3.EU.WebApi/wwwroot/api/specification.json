@@ -335,6 +335,24 @@
               "format": "int32"
             },
             "x-position": 3
+          },
+          {
+            "name": "retryCount",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 4
+          },
+          {
+            "name": "image",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 5
           }
         ],
         "responses": {
@@ -636,6 +654,9 @@
               "status": {
                 "$ref": "#/components/schemas/SliceStatus"
               },
+              "targetPlatform": {
+                "$ref": "#/components/schemas/TargetPlatform"
+              },
               "startTime": {
                 "type": "string",
                 "format": "date-time"
@@ -753,13 +774,15 @@
         "description": "",
         "x-enumNames": [
           "Pending",
+          "Starting",
           "Running",
           "Completed"
         ],
         "enum": [
           0,
           1,
-          2
+          2,
+          3
         ]
       },
       "TargetPlatform": {
@@ -807,6 +830,9 @@
               "sliceStatus": {
                 "type": "string",
                 "nullable": true
+              },
+              "targetPlatform": {
+                "$ref": "#/components/schemas/TargetPlatform"
               },
               "startTime": {
                 "type": "string",

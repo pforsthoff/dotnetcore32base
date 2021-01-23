@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Cheetas3.EU.Infrastructure.Identity\Cheetas3.EU.Identity.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

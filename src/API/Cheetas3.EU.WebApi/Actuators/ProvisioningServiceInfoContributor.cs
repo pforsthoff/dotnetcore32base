@@ -19,6 +19,8 @@ namespace Cheetas3.EU.Actuators
                 MaxConcurrency = _configurationService.MaxConcurrency,
                 SliceDurationInSeconds = _configurationService.SliceDurationInSeconds,
                 DevAttributeContainerLifeDuration = _configurationService.DevAttributeContainerLifeDuration,
+                RetryCount = _configurationService.RetryCount,
+                Image = _configurationService.Image
             });
         }
     }

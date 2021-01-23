@@ -20,6 +20,9 @@ namespace Cheetas3.EU.Infrastructure.Services
         public int MaxConcurrency { get; set; }
         public int SliceDurationInSeconds { get; set; }
         public int DevAttributeContainerLifeDuration { get; set; }
+        public string Image { get; set; }
+        public int RetryCount { get; set; }
+
 
 
         public ConfigurationProvisioningService(IConfiguration configuration, ILogger<ConfigurationProvisioningService> logger)
@@ -49,6 +52,20 @@ namespace Cheetas3.EU.Infrastructure.Services
             {
                 DevAttributeContainerLifeDuration = devAttributeContainerLifeDuration;
                 _logger.LogInformation($"DevAttributeContainerLifeDuration Passed into Service. Value:{devAttributeContainerLifeDuration}");
+            }
+
+            string image = Configuration.GetValue<string>("AppSettings:Image");
+            if (image != string.Empty)
+            {
+                Image = image;
+                _logger.LogInformation($"Image Passed into Service. Value:{image}");
+            }
+
+            int retryCount = Configuration.GetValue<int>("AppSettings:RetryCount");
+            if (retryCount != 0)
+            {
+                RetryCount = retryCount;
+                _logger.LogInformation($"RetryCount Passed into Service. Value:{retryCount}");
             }
 
             _logger.LogInformation("Configuration Service Started");

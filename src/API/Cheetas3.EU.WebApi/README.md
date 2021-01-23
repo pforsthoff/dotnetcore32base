@@ -6,13 +6,14 @@
 
 ```shell
 dotnet ef migrations add CheetasDb_Migration -s Cheetas3.EU.WebApi -p Cheetas3.EU.Infrastructure
+dotnet ef migrations add CheetasDb_Migration -s .\API\Cheetas3.EU.WebApi\ -p .\Infrastructure\Cheetas3.EU.Persistence\
 ```
 
 ### Docker Run Commands 
 EU Conversion Service
 
 ```shell
-docker run -it -d <Continer Image ID> -e SliceId=3 [-e ServiceHealthEndPoint="http://localhost:8890/actuator/health"] [-e SleepDuration=10000] [-e RetryCount=5]
+docker run -it -d <Continer Image ID> -e SliceId=3 [-e ServiceHealthEndPoint="http://localhost:5000/actuator/health"] [-e SleepDuration=10000] [-e RetryCount=5]
 ```
 ### K8S yaml files are locted in 
 
@@ -20,7 +21,7 @@ docker run -it -d <Continer Image ID> -e SliceId=3 [-e ServiceHealthEndPoint="ht
 TODO:
 LIST
  1. Persist Message from Rabbit from MessageQueue Service <Slice Updates>
- 2. Create Parameters Controller & CQRS for updates
+ 2. (DONE) Create Parameters Controller & CQRS for updates (DONE)
  3. Manage Concurrency for Jobs
  4. Manage Jobs from Queues
  5. HostInfo Actuator - Paul
