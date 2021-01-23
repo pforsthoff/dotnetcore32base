@@ -1,4 +1,4 @@
-﻿using Cheetas3.EU.Application.Slices.Queries;
+﻿using Cheetas3.EU.Application.Features.Slices.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;

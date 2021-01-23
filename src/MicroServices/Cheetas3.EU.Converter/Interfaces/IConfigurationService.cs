@@ -8,6 +8,7 @@ namespace Cheetas3.EU.Converter.Interfaces
         public IConfiguration Configuration { get; }
         public string ServiceHealthEndPoint { get; set; }
         public ServiceInfoStatus ServiceInfoStatus { get; set; }
+        public string Status { get; set; }
         public int RetryCount { get; set; }
         public int SliceId { get; set; }
         public int JobId { get; set; }

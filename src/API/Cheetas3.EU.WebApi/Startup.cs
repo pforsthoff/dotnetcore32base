@@ -42,7 +42,6 @@ namespace Cheetas3.EU
             services.AddHealthActuator(Configuration);
             services.AddSingleton<IHealthContributor, CustomHealthContributor>();
             services.AddInfoActuator(Configuration);
-            //services.AddSingleton<IInfoContributor, ArbitraryInfoContributor>();
             services.AddSingleton<IInfoContributor, ProvisioningServiceInfoContributor>();
             services.AddSingleton<IFileProvisioningService, FileProvisioningService>();
 

@@ -15,6 +15,7 @@ namespace Cheetas3.EU.Converter.Actuators
         {
             builder.WithInfo("ConverterService", new {
                 status = _configurationService.ServiceInfoStatus.ToString(),
+                workstatus = _configurationService.Status,
                 sleepDuration = _configurationService.SleepDuration,
                 apiUrl = _configurationService.ServiceHealthEndPoint,
                 jobId = _configurationService.JobId,

@@ -525,15 +525,14 @@ export class JobsClient implements IJobsClient {
     }
 }
 
-export interface IPropertiesClient {
-    createJob(id: number): Observable<FileResponse>;
-    executeJob(id: number | undefined): Observable<FileResponse>;
+export interface IParametersClient {
+    updateParameters(maxConcurrency: number | undefined, devAttributeContainerLifeDuration: number | undefined, sliceDurationInSeconds: number | undefined): Observable<FileResponse>;
 }
 
 @Injectable({
     providedIn: 'root'
 })
-export class PropertiesClient implements IPropertiesClient {
+export class ParametersClient implements IParametersClient {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -543,61 +542,20 @@ export class PropertiesClient implements IPropertiesClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    createJob(id: number): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Properties/createjob/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/octet-stream"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCreateJob(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processCreateJob(<any>response_);
-                } catch (e) {
-                    return <Observable<FileResponse>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<FileResponse>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processCreateJob(response: HttpResponseBase): Observable<FileResponse> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<FileResponse>(<any>null);
-    }
-
-    executeJob(id: number | undefined): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Properties/ExecuteJob?";
-        if (id === null)
-            throw new Error("The parameter 'id' cannot be null.");
-        else if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&";
+    updateParameters(maxConcurrency: number | undefined, devAttributeContainerLifeDuration: number | undefined, sliceDurationInSeconds: number | undefined): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Parameters/updateparameters?";
+        if (maxConcurrency === null)
+            throw new Error("The parameter 'maxConcurrency' cannot be null.");
+        else if (maxConcurrency !== undefined)
+            url_ += "maxConcurrency=" + encodeURIComponent("" + maxConcurrency) + "&";
+        if (devAttributeContainerLifeDuration === null)
+            throw new Error("The parameter 'devAttributeContainerLifeDuration' cannot be null.");
+        else if (devAttributeContainerLifeDuration !== undefined)
+            url_ += "devAttributeContainerLifeDuration=" + encodeURIComponent("" + devAttributeContainerLifeDuration) + "&";
+        if (sliceDurationInSeconds === null)
+            throw new Error("The parameter 'sliceDurationInSeconds' cannot be null.");
+        else if (sliceDurationInSeconds !== undefined)
+            url_ += "sliceDurationInSeconds=" + encodeURIComponent("" + sliceDurationInSeconds) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -609,11 +567,11 @@ export class PropertiesClient implements IPropertiesClient {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processExecuteJob(response_);
+            return this.processUpdateParameters(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processExecuteJob(<any>response_);
+                    return this.processUpdateParameters(<any>response_);
                 } catch (e) {
                     return <Observable<FileResponse>><any>_observableThrow(e);
                 }
@@ -622,7 +580,7 @@ export class PropertiesClient implements IPropertiesClient {
         }));
     }
 
-    protected processExecuteJob(response: HttpResponseBase): Observable<FileResponse> {
+    protected processUpdateParameters(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :

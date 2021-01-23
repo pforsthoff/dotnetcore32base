@@ -6,6 +6,7 @@
         Ready,
         Running,
         CompletedSuccessfully,
-        TerminatedWithErrors
+        TerminatedWithErrors,
+        Waiting
     }
 }

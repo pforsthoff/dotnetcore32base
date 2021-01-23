@@ -302,54 +302,39 @@
         }
       }
     },
-    "/api/Properties/createjob/{id}": {
-      "get": {
-        "tags": [
-          "Properties"
-        ],
-        "operationId": "Properties_CreateJob",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Properties/ExecuteJob": {
+    "/api/Parameters/updateparameters": {
       "post": {
         "tags": [
-          "Properties"
+          "Parameters"
         ],
-        "operationId": "Properties_ExecuteJob",
+        "operationId": "Parameters_UpdateParameters",
         "parameters": [
           {
-            "name": "id",
+            "name": "maxConcurrency",
             "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
             },
             "x-position": 1
+          },
+          {
+            "name": "devAttributeContainerLifeDuration",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "sliceDurationInSeconds",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
           }
         ],
         "responses": {

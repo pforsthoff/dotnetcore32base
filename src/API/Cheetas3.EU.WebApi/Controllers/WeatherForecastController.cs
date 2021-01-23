@@ -1,4 +1,4 @@
-﻿using Cheetas3.EU.Application.WeatherForecasts.Queries.GetWeatherForecasts;
+﻿using Cheetas3.EU.Application.Features.WeatherForecasts.Queries.GetWeatherForecasts;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;

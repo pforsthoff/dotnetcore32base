@@ -93,6 +93,7 @@ namespace Cheetas3.EU.Infrastructure.Services
                 Spec = new V1JobSpec()
                 {
                     TtlSecondsAfterFinished = 0,
+                    BackoffLimit = 3,
                     Template = new V1PodTemplateSpec()
                     {
                         Spec = new V1PodSpec()
@@ -131,7 +132,7 @@ namespace Cheetas3.EU.Infrastructure.Services
                                     }
                                 }
                             },
-                            RestartPolicy = "Never",
+                            RestartPolicy = "OnFailure",
                         },
                     },
                 }

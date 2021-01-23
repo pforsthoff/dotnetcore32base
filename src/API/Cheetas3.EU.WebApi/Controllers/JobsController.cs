@@ -1,5 +1,5 @@
-﻿using Cheetas3.EU.Application.Jobs.Comands.ExecuteJob;
-using Cheetas3.EU.Application.Jobs.Queries;
+﻿using Cheetas3.EU.Application.Features.Jobs.Comands.ExecuteJob;
+using Cheetas3.EU.Application.Features.Jobs.Queries;
 using Cheetas3.EU.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

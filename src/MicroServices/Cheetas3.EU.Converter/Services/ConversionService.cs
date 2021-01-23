@@ -25,6 +25,7 @@ namespace Cheetas3.EU.Converter.Services
         private readonly IApplicationDbContext _context;
         private Timer _timer;
         private Slice _slice;
+        private bool _continuePolling = true;
 
         public ConversionService(IConfigurationService configurationService,
                                  IMessageQueueService messageQueueService,
@@ -43,8 +44,8 @@ namespace Cheetas3.EU.Converter.Services
         {
             _logger.LogInformation($"Conversion Service is Initializaing for SliceId: {_configurationService.SliceId}");
 
-            //Poll Container Health Every 2 Seconds
-            _timer = new Timer(PollServiceHealthStatus, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
+            //Poll Container Health Every 5 Seconds
+            _timer = new Timer(PollServiceHealthStatus, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
             return Task.CompletedTask;
         }
 
@@ -52,9 +53,10 @@ namespace Cheetas3.EU.Converter.Services
         {
             var status = GetServiceHealthStatus();
 
-            if (status == ServiceHealthStatus.Up)
+            if (status == ServiceHealthStatus.Up && _continuePolling)
             {
                 _timer.Dispose();
+                _continuePolling = false;
                 DoConversion();
                 ShutDownApp();
             }
@@ -67,6 +69,7 @@ namespace Cheetas3.EU.Converter.Services
             StopAsync(new CancellationToken());
             _applicationLifetime.StopApplication();
         }
+
         private void UpdateConfigurationServiceProperties(Slice slice)
         {
             _configurationService.ServiceInfoStatus = ServiceInfoStatus.Running;
@@ -93,22 +96,27 @@ namespace Cheetas3.EU.Converter.Services
                 _slice.SliceStarted = DateTime.Now;
                 _messageQueueService.PublishMessage(_slice.ToMessage());
 
-                //_context.Slices.Update(_slice);
-                //await _context.SaveChangesAsync(new CancellationToken());
-                _configurationService.ServiceInfoStatus = ServiceInfoStatus.Running;
-                _logger.LogInformation($"SliceId {_slice.Id} conversion has started.");
 
+                _logger.LogInformation($"SliceId {_slice.Id} conversion has started.");
+                _configurationService.ServiceInfoStatus = ServiceInfoStatus.Waiting;
                 Thread.Sleep(_configurationService.SleepDuration);
 
+                for (int i = 0; i < 10; i++)
+                {
+                    _configurationService.Status += ".";
+                    Thread.Sleep(_configurationService.SleepDuration/10);
+                }
+                _configurationService.ServiceInfoStatus = ServiceInfoStatus.Running;
                 //Complete Slice Conversion
                 _slice.Status = SliceStatus.Completed;
                 _slice.SliceCompleted = DateTime.Now;
                 _messageQueueService.PublishMessage(_slice.ToMessage());
 
-                //_context.Slices.Update(_slice);
-                // _context.SaveChangesAsync(new CancellationToken());
                 _configurationService.ServiceInfoStatus = ServiceInfoStatus.CompletedSuccessfully;
                 _logger.LogInformation($"SliceId {_slice.Id} conversion has completed.");
+
+                _configurationService.ServiceInfoStatus = ServiceInfoStatus.CompletedSuccessfully;
+
             }
             else
             {

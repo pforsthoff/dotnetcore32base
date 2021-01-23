@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Cheetas3.EU.Application.Common.Mappings;
-using Cheetas3.EU.Application.Files.Queries;
-using Cheetas3.EU.Application.Jobs.Queries;
-using Cheetas3.EU.Application.Slices.Queries;
+using Cheetas3.EU.Application.Features.Files.Queries;
+using Cheetas3.EU.Application.Features.Jobs.Queries;
+using Cheetas3.EU.Application.Features.Slices.Queries;
 using Cheetas3.EU.Domain.Entities;
 using NUnit.Framework;
 using System;
