@@ -81,7 +81,6 @@ namespace Cheetas3.EU.Converter.Services
         }
         private void DoConversion()
         {
-            //If 0 is passed into config.service, we're not doing any updates
             _slice = _context.Slices
                 .Where(x => x.Id == _configurationService.SliceId).Include(i => i.Job.Slices)
                 .SingleOrDefault();
@@ -90,13 +89,13 @@ namespace Cheetas3.EU.Converter.Services
 
             UpdateConfigurationServiceProperties(_slice);
 
-            if (_slice.Status == SliceStatus.Pending)
+            if (_slice.Status == SliceStatus.Starting)
             {
                 _slice.Status = SliceStatus.Running;
                 _slice.SliceStarted = DateTime.Now;
                 _messageQueueService.PublishMessage(_slice.ToMessage());
 
-                _logger.LogInformation($"SliceId {_slice.Id} conversion has started.");
+                _logger.LogInformation($"SliceId {_slice.Id} conversion is running.");
                 _configurationService.ServiceInfoStatus = ServiceInfoStatus.Waiting;
                 Thread.Sleep(_configurationService.SleepDuration);
 
