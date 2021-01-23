@@ -23,7 +23,7 @@ namespace Cheetas3.EU.Infrastructure
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
 #endif
                 .UseSqlServer(cstr));
-            services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
+            services.AddTransient<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(
                         configuration.GetConnectionString("DefaultConnection"),
@@ -63,6 +63,7 @@ namespace Cheetas3.EU.Infrastructure
             services.AddScoped<IKubernetesService, KubernetesService>();
             services.AddScoped<IMessageQueueService, MessageQueueService>();
             services.AddSingleton<IAppConfigService, AppConfigService>();
+            services.AddSingleton<IJobService, JobService>();
 
             services
                 .AddDefaultIdentity<ApplicationUser>()

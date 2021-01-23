@@ -1,9 +1,10 @@
 ﻿using Cheetas3.EU.Domain.Entities;
 using System;
+using System.Threading.Tasks;
 
 namespace Cheetas3.EU.Application.Common.Events
 {
-    public delegate void MessageReceivedEventHandler(object? sender, MessageEntityEventArgs<Slice> e);
+    public delegate Task MessageReceivedEventHandler(object? sender, MessageEntityEventArgs<Slice> e);
 
     public class MessageEntityEventArgs<T> : EventArgs
     {
