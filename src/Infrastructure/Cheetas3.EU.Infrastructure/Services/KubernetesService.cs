@@ -20,7 +20,11 @@ namespace Cheetas3.EU.Infrastructure.Services
             var config = KubernetesClientConfiguration.BuildConfigFromConfigFile("assets/config");
             return new Kubernetes(config);
         }
-
+        //TODO
+        public void CreateKubernetesSecretFromAppsettiings()
+        {
+            var client = this.GetKubernetesClient();
+        }
         public V1PodList GetPods(string @namespace)
         {
             var list = _client.ListNamespacedPod(@namespace);
@@ -118,7 +122,7 @@ namespace Cheetas3.EU.Infrastructure.Services
                                                 name: "config-volume",
                                                 subPath: "appsettings.json")
                                     },
-                                    ImagePullPolicy = "Always"
+                                    ImagePullPolicy = "Always",
                                 },
                             },
                             Volumes = new List<V1Volume>()
@@ -139,11 +143,14 @@ namespace Cheetas3.EU.Infrastructure.Services
             };
             return job;
         }
+        //TODO
         public V1Job GetEUConverterAppSettingsSecret(int id)
         {
             V1Secret secret = new V1Secret()
             {
-
+                ApiVersion = "batch/v1",
+                Kind = V1Job.KubeKind,
+                Metadata = new V1ObjectMeta() { Name = "eu-appsettings-secret" },
             };
             return null;
         }

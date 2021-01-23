@@ -18,7 +18,7 @@ spec:
             - name: SliceId
               value: "2"
             - name: ApiHealthUrl
-              value: "http://localhost:8890/actuator/health"
+              value: "http://localhost:5000/actuator/health"
             - name: SleepDuration
               value: "600000"
       restartPolicy: Never    
