@@ -5,22 +5,26 @@ namespace Cheetas3.EU.Converter.Actuators
 {
     public class ConversionServiceInfoContributor : IInfoContributor
     {
-        private readonly IConfigurationService _configurationService;
+        private readonly IAppConfigService _appConfigService;
 
-        public ConversionServiceInfoContributor(IConfigurationService configurationService)
+        public ConversionServiceInfoContributor(IAppConfigService appConfigService)
         {
-            _configurationService = configurationService;
+            _appConfigService = appConfigService;
         }
         public void Contribute(IInfoBuilder builder)
         {
             builder.WithInfo("ConverterService", new {
-                status = _configurationService.ServiceInfoStatus.ToString(),
-                workstatus = _configurationService.Status,
-                sleepDuration = _configurationService.SleepDuration,
-                apiUrl = _configurationService.ServiceHealthEndPoint,
-                jobId = _configurationService.JobId,
-                sliceId = _configurationService.SliceId,
-                jobstatus = $"Processing Slice { _configurationService.Id } of {_configurationService.SliceCount} slices for provision job {_configurationService.JobId}."
+                status = _appConfigService.ServiceInfoStatus.ToString(),
+                coverterPlatform = _appConfigService.ConverterPlatform.ToString(),
+                sleepDuration = _appConfigService.SleepDuration,
+                retryCount = _appConfigService.RetryCount,
+                apiInfoUrl = "http://localhost:5000/actuator/info",
+                apiHealthUrl = "http://localhost:5000/actuator,health",
+                jobId = _appConfigService.JobId,
+                sliceId = _appConfigService.SliceId,
+                jobstatus = $"Processing Slice { _appConfigService.Id } " +
+                    $"of {_appConfigService.SliceCount} " +
+                    $"slices for provision job {_appConfigService.JobId}. "
             });
         }
     }

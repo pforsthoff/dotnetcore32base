@@ -7,6 +7,7 @@
 ```shell
 dotnet ef migrations add CheetasDb_Migration -s Cheetas3.EU.WebApi -p Cheetas3.EU.Infrastructure
 dotnet ef migrations add CheetasDb_Migration -s .\API\Cheetas3.EU.WebApi\ -p .\Infrastructure\Cheetas3.EU.Persistence\
+dotnet ef migrations add CheetasDb_Migration -s .\API\Cheetas3.EU.WebApi\ -p .\Infrastructure\Cheetas3.EU.Infrastructure\Cheetas3.EU.Infrastructure.csproj
 ```
 
 ### Docker Run Commands 

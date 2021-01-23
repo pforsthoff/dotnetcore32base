@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices;
 using Steeltoe.Extensions.Logging;
-using Cheetas3.EU.Persistance;
+using Cheetas3.EU.Infrastructure.Persistance;
 
 namespace Cheetas3.EU
 {

@@ -22,9 +22,9 @@ namespace Cheetas3.EU.Application.Features.Parameters.Commands.UpdateParameters
 
     public class UpdateParametersCommandHandler : IRequestHandler<UpdateParametersCommand, string>
     {
-        private readonly IConfigurationProvisioningService _configurationService;
+        private readonly IAppConfigService _configurationService;
 
-        public UpdateParametersCommandHandler(IConfigurationProvisioningService configurationService)
+        public UpdateParametersCommandHandler(IAppConfigService configurationService)
         {
             _configurationService = configurationService;
         }

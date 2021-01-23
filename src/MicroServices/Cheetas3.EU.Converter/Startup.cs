@@ -37,7 +37,7 @@ namespace Cheetas3.EU.Converter
 
             //Application Services
             services.AddTransient<IDateTime, DateTimeService>();
-            services.AddSingleton<IConfigurationService, ConfigurationService>();
+            services.AddSingleton<IAppConfigService, AppConfigService>();
             services.AddSingleton<IMessageQueueService, MessageQueueService>();
 
             //DBContext

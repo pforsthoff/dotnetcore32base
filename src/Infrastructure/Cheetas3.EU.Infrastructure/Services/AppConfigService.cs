@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Cheetas3.EU.Infrastructure.Services
 {
-    public class ConfigurationProvisioningService : IConfigurationProvisioningService
+    public class AppConfigService : IAppConfigService
     {
         public IConfiguration Configuration { get; }
-        public ILogger<ConfigurationProvisioningService> _logger;
+        public ILogger<AppConfigService> _logger;
 
 
         public ServiceInfoStatus ServiceInfoStatus { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -25,7 +25,7 @@ namespace Cheetas3.EU.Infrastructure.Services
 
 
 
-        public ConfigurationProvisioningService(IConfiguration configuration, ILogger<ConfigurationProvisioningService> logger)
+        public AppConfigService(IConfiguration configuration, ILogger<AppConfigService> logger)
         {
             Configuration = configuration;
             _logger = logger;

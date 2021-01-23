@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Cheetas3.EU.Application.Common.Interfaces
 {
-    public interface IConfigurationProvisioningService
+    public interface IAppConfigService
     {
         public IConfiguration Configuration { get; }
         public ServiceInfoStatus ServiceInfoStatus { get; set; }

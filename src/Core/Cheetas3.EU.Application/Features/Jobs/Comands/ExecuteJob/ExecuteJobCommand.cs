@@ -22,7 +22,7 @@ namespace Cheetas3.EU.Application.Features.Jobs.Comands.ExecuteJob
 
     public class ExecuteJobCommandHandler : IRequestHandler<ExecuteJobCommand, int>
     {
-        private readonly IConfigurationProvisioningService _configurationService;
+        private readonly IAppConfigService _configurationService;
         private readonly IApplicationDbContext _context;
         private readonly IDockerService _dockerService;
         private readonly IKubernetesService _kubernetesService;
@@ -38,7 +38,7 @@ namespace Cheetas3.EU.Application.Features.Jobs.Comands.ExecuteJob
         public ExecuteJobCommandHandler(IApplicationDbContext context, IDockerService dockerService,
                                         IKubernetesService kubernetesService, IDateTime dateTime,
                                         IMessageQueueService messageQueueService, ILogger<ExecuteJobCommandHandler> logger,
-                                        IConfigurationProvisioningService configurationService, IMapper mapper)
+                                        IAppConfigService configurationService, IMapper mapper)
         {
             _context = context;
             _dockerService = dockerService;
@@ -166,7 +166,7 @@ namespace Cheetas3.EU.Application.Features.Jobs.Comands.ExecuteJob
                 {
                     $"RetryCount={_configurationService.RetryCount}",
                     $"SleepDuration={_configurationService.DevAttributeContainerLifeDuration}",
-                    $"ServiceHealthEndPoint={_configurationService.}"
+                    $"ServiceHealthEndPoint={_configurationService}."
                 };
 
                 for (int i = 0; i < _configurationService.MaxConcurrency; i++)

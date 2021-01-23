@@ -19,7 +19,7 @@ namespace Cheetas3.EU.Converter.Services
     public class ConversionService : IHostedService, IDisposable
     {
         private readonly IHostApplicationLifetime _applicationLifetime;
-        private readonly IConfigurationService _configurationService;
+        private readonly IAppConfigService _configurationService;
         private readonly IMessageQueueService _messageQueueService;
         private readonly ILogger<ConversionService> _logger;
         private readonly IApplicationDbContext _context;
@@ -27,7 +27,7 @@ namespace Cheetas3.EU.Converter.Services
         private Slice _slice;
         private bool _continuePolling = true;
 
-        public ConversionService(IConfigurationService configurationService,
+        public ConversionService(IAppConfigService configurationService,
                                  IMessageQueueService messageQueueService,
                                  ILogger<ConversionService> logger,
                                  IApplicationDbContext context,
@@ -96,16 +96,10 @@ namespace Cheetas3.EU.Converter.Services
                 _slice.SliceStarted = DateTime.Now;
                 _messageQueueService.PublishMessage(_slice.ToMessage());
 
-
                 _logger.LogInformation($"SliceId {_slice.Id} conversion has started.");
                 _configurationService.ServiceInfoStatus = ServiceInfoStatus.Waiting;
                 Thread.Sleep(_configurationService.SleepDuration);
 
-                for (int i = 0; i < 10; i++)
-                {
-                    _configurationService.Status += ".";
-                    Thread.Sleep(_configurationService.SleepDuration/10);
-                }
                 _configurationService.ServiceInfoStatus = ServiceInfoStatus.Running;
                 //Complete Slice Conversion
                 _slice.Status = SliceStatus.Completed;
@@ -116,7 +110,6 @@ namespace Cheetas3.EU.Converter.Services
                 _logger.LogInformation($"SliceId {_slice.Id} conversion has completed.");
 
                 _configurationService.ServiceInfoStatus = ServiceInfoStatus.CompletedSuccessfully;
-
             }
             else
             {

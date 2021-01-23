@@ -11,7 +11,7 @@ using Steeltoe.Management.Endpoint.Health;
 using Steeltoe.Management.Endpoint.Info;
 using Steeltoe.Management.Info;
 using Microsoft.AspNetCore.Mvc;
-using Cheetas3.EU.Persistance;
+using Cheetas3.EU.Infrastructure.Persistance;
 using Cheetas3.EU.Application.Common.Interfaces;
 using Cheetas3.EU.Application;
 using Cheetas3.EU.Infrastructure;
@@ -35,7 +35,7 @@ namespace Cheetas3.EU
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddSingleton<IConfigurationProvisioningService, ConfigurationProvisioningService>();
+            services.AddSingleton<IAppConfigService, AppConfigService>();
 
             var cstr = Configuration.GetConnectionString("DefaultConnection");
 

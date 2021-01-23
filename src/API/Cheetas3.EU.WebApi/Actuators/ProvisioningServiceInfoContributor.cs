@@ -6,9 +6,9 @@ namespace Cheetas3.EU.Actuators
 {
     public class ProvisioningServiceInfoContributor : IInfoContributor
     {
-        private readonly IConfigurationProvisioningService _configurationService;
+        private readonly IAppConfigService _configurationService;
 
-        public ProvisioningServiceInfoContributor(IConfigurationProvisioningService configurationService)
+        public ProvisioningServiceInfoContributor(IAppConfigService configurationService)
         {
             _configurationService = configurationService;
         }
