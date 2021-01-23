@@ -18,10 +18,11 @@ namespace Cheetas3.EU.Infrastructure.Services
 
         public ServiceInfoStatus ServiceInfoStatus { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int MaxConcurrency { get; set; }
-        public int SliceDurationInSeconds { get; set; }
+        public int SliceTimeSpan { get; set; }
         public int DevAttributeContainerLifeDuration { get; set; }
         public string Image { get; set; }
         public int RetryCount { get; set; }
+        public string DockerHostUrl { get; set; }
 
 
 
@@ -37,14 +38,14 @@ namespace Cheetas3.EU.Infrastructure.Services
             if (maxConcurrency != 0)
             {
                 MaxConcurrency = maxConcurrency;
-                _logger.LogInformation($"MaxConcurrency Passed into Service. Value:{maxConcurrency}");
+                _logger.LogInformation($"MaxConcurrency Value:{maxConcurrency}");
             }
 
-            int sliceDurationInSeconds = Configuration.GetValue<int>("AppSettings:SliceDurationInSeconds");
-            if (sliceDurationInSeconds != 0)
+            int sliceTimeSpan = Configuration.GetValue<int>("AppSettings:SliceTimeSpan");
+            if (sliceTimeSpan != 0)
             {
-                SliceDurationInSeconds = sliceDurationInSeconds;
-                _logger.LogInformation($"SliceDurationInSeconds Passed into Service. Value:{sliceDurationInSeconds}");
+                SliceTimeSpan = sliceTimeSpan;
+                _logger.LogInformation($"SliceTimeSpan Value:{sliceTimeSpan}");
             }
 
             int devAttributeContainerLifeDuration = Configuration.GetValue<int>("AppSettings:DevAttributeContainerLifeDuration");
@@ -58,14 +59,21 @@ namespace Cheetas3.EU.Infrastructure.Services
             if (image != string.Empty)
             {
                 Image = image;
-                _logger.LogInformation($"Image Passed into Service. Value:{image}");
+                _logger.LogInformation($"Image Value:{image}");
+            }
+
+            string dockerhostUrl = Configuration.GetValue<string>("AppSettings:DockerHostUrl");
+            if (dockerhostUrl != string.Empty)
+            {
+                DockerHostUrl = dockerhostUrl;
+                _logger.LogInformation($"DockerHostUrl Value:{image}");
             }
 
             int retryCount = Configuration.GetValue<int>("AppSettings:RetryCount");
             if (retryCount != 0)
             {
                 RetryCount = retryCount;
-                _logger.LogInformation($"RetryCount Passed into Service. Value:{retryCount}");
+                _logger.LogInformation($"Container/Job RetryCount Value:{retryCount}");
             }
 
             _logger.LogInformation("Configuration Service Started");

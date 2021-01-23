@@ -9,9 +9,14 @@ namespace Cheetas3.EU.Infrastructure.Services
     public class KubernetesService : IKubernetesService
     {
         private readonly ILogger<KubernetesService> _logger;
+        IAppConfigService _appConfigService;
+
         private readonly IKubernetes _client;
-        public KubernetesService(ILogger<KubernetesService> logger)
+        public KubernetesService(IAppConfigService appConfigService, ILogger<KubernetesService> logger)
         {
+            _logger = logger;
+            _appConfigService = appConfigService;
+
             var config = KubernetesClientConfiguration.BuildConfigFromConfigFile("assets/config");
             _client = new Kubernetes(config);
         }
@@ -106,14 +111,14 @@ namespace Cheetas3.EU.Infrastructure.Services
                             {
                                 new V1Container()
                                 {
-                                    Image = "pguerette/euconverter:latest",
+                                    Image = _appConfigService.Image,
                                     Name = $"eu-converter-sliceid-{id}",
                                     //Command = new List<string>() { "/bin/bash", "-c", "--" },
                                     Env = new List<V1EnvVar>()
                                     {
                                         new V1EnvVar("SliceId", id.ToString()),
-                                        new V1EnvVar("ServiceHealthEndPoint", "http://localhost:5000/actuator/health"),
-                                        new V1EnvVar("SleepDuration", "60000")
+                                        new V1EnvVar("RetryCount", _appConfigService.RetryCount.ToString()),
+                                        new V1EnvVar("SleepDuration", _appConfigService.DevAttributeContainerLifeDuration.ToString())
                                     },
                                     VolumeMounts = new List<V1VolumeMount>()
                                     {
@@ -141,6 +146,8 @@ namespace Cheetas3.EU.Infrastructure.Services
                     },
                 }
             };
+
+            _logger.LogInformation($"Kubernetes job eu-converter-sliceid-{id} started.");
             return job;
         }
         //TODO

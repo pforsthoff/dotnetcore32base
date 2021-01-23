@@ -64,7 +64,6 @@ namespace Cheetas3.EU.Application.Features.Jobs.Comands.ExecuteJob
         {
             if (slice.Status == SliceStatus.Completed)
             {
-                //Check The  QueueType To See if More Jobs Waiting
                 switch (slice.TargetPlatform)
                 {
                     case TargetPlatform.Docker:
@@ -75,22 +74,26 @@ namespace Cheetas3.EU.Application.Features.Jobs.Comands.ExecuteJob
                         break;
                     case TargetPlatform.Kubernetes:
                         if (_k8sQueue.Any())
-                        {
-                        }
+                            await ExecuteJobSliceWithKubernetesAsync();
+                        else
+                            _k8sJobRunning = false;
                         break;
                     default:
                         break;
                 }
-
             }
         }
 
+        public async Task SaveEntityUpdatesAsync()
+        {
+           await _context.SaveChangesAsync(CancellationToken.None);
+        }
 
         public async Task UpdateDataBaseAsync(Slice slice)
         {
             var entity = await _context.Slices.FindAsync(slice.Id);
             _mapper.Map(slice, entity);
-            //await _context.SaveChangesAsync(CancellationToken.None);
+            await SaveEntityUpdatesAsync();
         }
 
 
@@ -108,7 +111,7 @@ namespace Cheetas3.EU.Application.Features.Jobs.Comands.ExecuteJob
 
             entity.Status = JobStatus.InProgress;
             entity.StartedDateTime = _dateTime.Now;
-            //await _context.SaveChangesAsync(cancellationToken);
+            await SaveEntityUpdatesAsync();
 
             var platform = request.TargetPlatform;
             switch (platform)
@@ -117,16 +120,10 @@ namespace Cheetas3.EU.Application.Features.Jobs.Comands.ExecuteJob
                     _messageQueueService.ConsumeMessage();
                     break;
                 case TargetPlatform.Docker:
-                    _ = ExecuteJobWithDockerAsync(entity);
+                    await ExecuteJobWithDockerAsync(entity);
                     break;
                 case TargetPlatform.Kubernetes:
-                    var client = _kubernetesService.GetKubernetesClient();
-                    V1Job job;
-                    foreach (var slice in entity.Slices.Where( r => r.Status == SliceStatus.Pending))
-                    {
-                        job = _kubernetesService.GetEUConverterJob(slice.Id);
-                        await client.CreateNamespacedJobWithHttpMessagesAsync(job, "default");
-                    }
+                    await ExecuteJobWithKubernetesAysnc(entity);
                     break;
                 default:
                     break;
@@ -138,49 +135,66 @@ namespace Cheetas3.EU.Application.Features.Jobs.Comands.ExecuteJob
         private async Task ExecuteJobSliceWithDockerAsync()
         {
             var slice = _dockerQueue.Dequeue();
+            slice.TargetPlatform = TargetPlatform.Docker;
+            slice.Status = SliceStatus.Starting;
+            await UpdateDataBaseAsync(slice);
+
             var envVariables = new List<string>
             {
                 $"RetryCount={_configurationService.RetryCount}",
                 $"Sliceid={slice.Id}",
-                $"SleepDuration=300000",
-                $"ServiceHealthEndPoint=http://localhost:5000/actuator/health"
+                $"SleepDuration={_configurationService.DevAttributeContainerLifeDuration}"
             };
+
             await _dockerService.CreateAndStartContainerAsync(_configurationService.Image, envVariables);
+        }
+
+        private async Task ExecuteJobSliceWithKubernetesAsync()
+        {
+            var slice = _k8sQueue.Dequeue();
+            slice.TargetPlatform = TargetPlatform.Kubernetes;
+            slice.Status = SliceStatus.Starting;
+            await UpdateDataBaseAsync(slice);
+
+            var client = _kubernetesService.GetKubernetesClient();
+            var job = _kubernetesService.GetEUConverterJob(slice.Id);
+            await client.CreateNamespacedJobWithHttpMessagesAsync(job, "default");
         }
 
         private async Task ExecuteJobWithDockerAsync(Job entity)
         {
-            //_dockerService.CreateDockerClient("http://192.168.1.20:2375");
-
-            //Add Slices To Queue
+            //Add Slices To Docker Queue
             foreach (var slice in entity.Slices.Where(p => p.Status == SliceStatus.Pending))
                 _dockerQueue.Enqueue(slice);
 
             if (!_dockerJobRunning)
             {
                 _dockerJobRunning = true;
-                _dockerService.CreateDockerClient();
-                var image = _configurationService.Image;
+                _dockerService.CreateDockerClient(_configurationService.DockerHostUrl);
+
+                string image = _configurationService.Image;
                 await _dockerService.PullImageAsync(image);
-                var envVariables = new List<string>
-                {
-                    $"RetryCount={_configurationService.RetryCount}",
-                    $"SleepDuration={_configurationService.DevAttributeContainerLifeDuration}",
-                    $"ServiceHealthEndPoint={_configurationService}."
-                };
 
                 for (int i = 0; i < _configurationService.MaxConcurrency; i++)
                 {
-                    if (_dockerQueue.Any())
-                    {
-                        var slice = _dockerQueue.Dequeue();
-                        envVariables.Add($"SliceId={slice.Id}");
-                        await _dockerService.CreateAndStartContainerAsync(image, envVariables);
-                        slice.Status = SliceStatus.Starting;
-                        slice.TargetPlatform = TargetPlatform.Docker;
-                        await UpdateDataBaseAsync(slice);
-                        envVariables.RemoveAt(3);
-                    }
+                    await ExecuteJobSliceWithDockerAsync();
+                }
+            }
+        }
+
+        private async Task ExecuteJobWithKubernetesAysnc(Job entity)
+        {
+            //Add Slices To k8s Queue
+            foreach (var slice in entity.Slices.Where(p => p.Status == SliceStatus.Pending))
+                _k8sQueue.Enqueue(slice);
+
+            if (!_k8sJobRunning)
+            {
+                _k8sJobRunning = true;
+
+                for (int i = 0; i < _configurationService.MaxConcurrency; i++)
+                {
+                    await ExecuteJobSliceWithKubernetesAsync();
                 }
             }
         }

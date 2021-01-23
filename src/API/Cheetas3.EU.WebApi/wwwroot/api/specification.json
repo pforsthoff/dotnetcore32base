@@ -6,6 +6,59 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/AppSettings": {
+      "get": {
+        "tags": [
+          "AppSettings"
+        ],
+        "operationId": "AppSettings_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppSettingsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/AppSettings/updateappsettings": {
+      "post": {
+        "tags": [
+          "AppSettings"
+        ],
+        "operationId": "AppSettings_UpdateAppSettings",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAppSettingsCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Files": {
       "get": {
         "tags": [
@@ -302,74 +355,6 @@
         }
       }
     },
-    "/api/Parameters/updateparameters": {
-      "post": {
-        "tags": [
-          "Parameters"
-        ],
-        "operationId": "Parameters_UpdateParameters",
-        "parameters": [
-          {
-            "name": "maxConcurrency",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          },
-          {
-            "name": "devAttributeContainerLifeDuration",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 2
-          },
-          {
-            "name": "sliceDurationInSeconds",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 3
-          },
-          {
-            "name": "retryCount",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 4
-          },
-          {
-            "name": "image",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 5
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/Slices": {
       "get": {
         "tags": [
@@ -451,6 +436,85 @@
   },
   "components": {
     "schemas": {
+      "AppSettingsDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AppSettings"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "AppSettings": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Entity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "retryCount": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "maxConcurrency": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "sliceTimeSpan": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "dockerHostUrl": {
+                "type": "string",
+                "nullable": true
+              },
+              "image": {
+                "type": "string",
+                "nullable": true
+              },
+              "devAttributeContainerLifeDuration": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "Entity": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false
+      },
+      "UpdateAppSettingsCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "maxConcurrency": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sliceTimeSpan": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "devAttributeContainerLifeDuration": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "retryCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "FileDto": {
         "allOf": [
           {
@@ -525,11 +589,6 @@
             }
           }
         ]
-      },
-      "Entity": {
-        "type": "object",
-        "x-abstract": true,
-        "additionalProperties": false
       },
       "CreateFileCommand": {
         "type": "object",

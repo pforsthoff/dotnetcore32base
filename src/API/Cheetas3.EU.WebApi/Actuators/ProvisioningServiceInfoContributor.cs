@@ -17,7 +17,7 @@ namespace Cheetas3.EU.Actuators
             builder.WithInfo("ProvisionerService", new {
                 //status = _configurationService.ServiceInfoStatus.ToString(),
                 MaxConcurrency = _configurationService.MaxConcurrency,
-                SliceDurationInSeconds = _configurationService.SliceDurationInSeconds,
+                SliceTimeSpan = _configurationService.SliceTimeSpan,
                 DevAttributeContainerLifeDuration = _configurationService.DevAttributeContainerLifeDuration,
                 RetryCount = _configurationService.RetryCount,
                 Image = _configurationService.Image

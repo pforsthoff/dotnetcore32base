@@ -23,9 +23,11 @@ namespace Cheetas3.EU.Controllers
 
         [HttpPost("ExecuteJob")]
         public async Task<ActionResult> ExecuteJob(int id, TargetPlatform targetPlatform)
+        //public async Task<ActionResult> ExecuteJob(ExecuteJobCommand command)
         {
-            //return Content($"Executing Conversion Job for id {id}");
+
             await Mediator.Send(new ExecuteJobCommand { Id = id, TargetPlatform = targetPlatform });
+            //await Mediator.Send(command);
             return NoContent();
         }
     }

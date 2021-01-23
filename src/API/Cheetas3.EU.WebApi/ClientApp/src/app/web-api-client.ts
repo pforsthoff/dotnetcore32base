@@ -14,6 +14,123 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface IAppSettingsClient {
+    get(): Observable<AppSettingsDto>;
+    updateAppSettings(command: UpdateAppSettingsCommand): Observable<FileResponse>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class AppSettingsClient implements IAppSettingsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    get(): Observable<AppSettingsDto> {
+        let url_ = this.baseUrl + "/api/AppSettings";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(<any>response_);
+                } catch (e) {
+                    return <Observable<AppSettingsDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AppSettingsDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<AppSettingsDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AppSettingsDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AppSettingsDto>(<any>null);
+    }
+
+    updateAppSettings(command: UpdateAppSettingsCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/AppSettings/updateappsettings";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdateAppSettings(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdateAppSettings(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpdateAppSettings(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(<any>null);
+    }
+}
+
 export interface IFilesClient {
     get(): Observable<FileDto[]>;
     create(command: CreateFileCommand): Observable<number>;
@@ -525,88 +642,6 @@ export class JobsClient implements IJobsClient {
     }
 }
 
-export interface IParametersClient {
-    updateParameters(maxConcurrency: number | undefined, devAttributeContainerLifeDuration: number | undefined, sliceDurationInSeconds: number | undefined, retryCount: number | undefined, image: string | null | undefined): Observable<FileResponse>;
-}
-
-@Injectable({
-    providedIn: 'root'
-})
-export class ParametersClient implements IParametersClient {
-    private http: HttpClient;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
-    }
-
-    updateParameters(maxConcurrency: number | undefined, devAttributeContainerLifeDuration: number | undefined, sliceDurationInSeconds: number | undefined, retryCount: number | undefined, image: string | null | undefined): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/api/Parameters/updateparameters?";
-        if (maxConcurrency === null)
-            throw new Error("The parameter 'maxConcurrency' cannot be null.");
-        else if (maxConcurrency !== undefined)
-            url_ += "maxConcurrency=" + encodeURIComponent("" + maxConcurrency) + "&";
-        if (devAttributeContainerLifeDuration === null)
-            throw new Error("The parameter 'devAttributeContainerLifeDuration' cannot be null.");
-        else if (devAttributeContainerLifeDuration !== undefined)
-            url_ += "devAttributeContainerLifeDuration=" + encodeURIComponent("" + devAttributeContainerLifeDuration) + "&";
-        if (sliceDurationInSeconds === null)
-            throw new Error("The parameter 'sliceDurationInSeconds' cannot be null.");
-        else if (sliceDurationInSeconds !== undefined)
-            url_ += "sliceDurationInSeconds=" + encodeURIComponent("" + sliceDurationInSeconds) + "&";
-        if (retryCount === null)
-            throw new Error("The parameter 'retryCount' cannot be null.");
-        else if (retryCount !== undefined)
-            url_ += "retryCount=" + encodeURIComponent("" + retryCount) + "&";
-        if (image !== undefined && image !== null)
-            url_ += "image=" + encodeURIComponent("" + image) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/octet-stream"
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUpdateParameters(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processUpdateParameters(<any>response_);
-                } catch (e) {
-                    return <Observable<FileResponse>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<FileResponse>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processUpdateParameters(response: HttpResponseBase): Observable<FileResponse> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<FileResponse>(<any>null);
-    }
-}
-
 export interface ISlicesClient {
     get(): Observable<SliceDto[]>;
     getById(id: number): Observable<SliceDto>;
@@ -825,6 +860,138 @@ export abstract class Entity implements IEntity {
 }
 
 export interface IEntity {
+}
+
+export class AppSettings extends Entity implements IAppSettings {
+    retryCount?: number;
+    maxConcurrency?: number;
+    sliceTimeSpan?: number;
+    dockerHostUrl?: string | undefined;
+    image?: string | undefined;
+    devAttributeContainerLifeDuration?: number;
+
+    constructor(data?: IAppSettings) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+        if (_data) {
+            this.retryCount = _data["retryCount"];
+            this.maxConcurrency = _data["maxConcurrency"];
+            this.sliceTimeSpan = _data["sliceTimeSpan"];
+            this.dockerHostUrl = _data["dockerHostUrl"];
+            this.image = _data["image"];
+            this.devAttributeContainerLifeDuration = _data["devAttributeContainerLifeDuration"];
+        }
+    }
+
+    static fromJS(data: any): AppSettings {
+        data = typeof data === 'object' ? data : {};
+        let result = new AppSettings();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["retryCount"] = this.retryCount;
+        data["maxConcurrency"] = this.maxConcurrency;
+        data["sliceTimeSpan"] = this.sliceTimeSpan;
+        data["dockerHostUrl"] = this.dockerHostUrl;
+        data["image"] = this.image;
+        data["devAttributeContainerLifeDuration"] = this.devAttributeContainerLifeDuration;
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface IAppSettings extends IEntity {
+    retryCount?: number;
+    maxConcurrency?: number;
+    sliceTimeSpan?: number;
+    dockerHostUrl?: string | undefined;
+    image?: string | undefined;
+    devAttributeContainerLifeDuration?: number;
+}
+
+export class AppSettingsDto extends AppSettings implements IAppSettingsDto {
+
+    constructor(data?: IAppSettingsDto) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): AppSettingsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AppSettingsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface IAppSettingsDto extends IAppSettings {
+}
+
+export class UpdateAppSettingsCommand implements IUpdateAppSettingsCommand {
+    maxConcurrency?: number;
+    sliceTimeSpan?: number;
+    devAttributeContainerLifeDuration?: number;
+    retryCount?: number;
+    image?: string | undefined;
+
+    constructor(data?: IUpdateAppSettingsCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.maxConcurrency = _data["maxConcurrency"];
+            this.sliceTimeSpan = _data["sliceTimeSpan"];
+            this.devAttributeContainerLifeDuration = _data["devAttributeContainerLifeDuration"];
+            this.retryCount = _data["retryCount"];
+            this.image = _data["image"];
+        }
+    }
+
+    static fromJS(data: any): UpdateAppSettingsCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateAppSettingsCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["maxConcurrency"] = this.maxConcurrency;
+        data["sliceTimeSpan"] = this.sliceTimeSpan;
+        data["devAttributeContainerLifeDuration"] = this.devAttributeContainerLifeDuration;
+        data["retryCount"] = this.retryCount;
+        data["image"] = this.image;
+        return data; 
+    }
+}
+
+export interface IUpdateAppSettingsCommand {
+    maxConcurrency?: number;
+    sliceTimeSpan?: number;
+    devAttributeContainerLifeDuration?: number;
+    retryCount?: number;
+    image?: string | undefined;
 }
 
 export abstract class AuditableEntity extends Entity implements IAuditableEntity {

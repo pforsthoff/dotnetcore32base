@@ -17,11 +17,11 @@ namespace Cheetas3.EU.Application.Features.Jobs.Comands.UpdateJob
         public JobStatus Status { get; set; }
     }
 
-    public class UpdateTodoItemCommandHandler : IRequestHandler<UpdateJobCommand>
+    public class UpdateJobCommandHandler : IRequestHandler<UpdateJobCommand>
     {
         private readonly IApplicationDbContext _context;
 
-        public UpdateTodoItemCommandHandler(IApplicationDbContext context)
+        public UpdateJobCommandHandler(IApplicationDbContext context)
         {
             _context = context;
         }
